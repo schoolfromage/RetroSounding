@@ -1,0 +1,8 @@
+Games like Abadox: the deadly inner war do not have info collected correclty because their link is not the same as their game title name (in this case the page name is "abadox") The picture description and genres are all "n/a"
+
+
+The Adams family games are not contained like the other games
+https://en.wikipedia.org/w/index.php?title=The_Addams_Family:_Pugsley's_Scavenger_Hunt
+Their descriptions will be incorect, and I dont know how to fix them right now
+
+Dates are stores as month: year atm
