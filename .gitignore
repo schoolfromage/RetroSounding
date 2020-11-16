@@ -1,0 +1,5 @@
+#pycache files
+.pyc
+
+#Macintosh files
+.DS_STORE

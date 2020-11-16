@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="../static/main.css">
+		<title>Retro-Sounding</title>
+	</head>
+
+	<body>
+		<img id='logo'  src='../static/images/logo.png' alt="Logo alt text" />
+		<div id="searchBar">
+			<form method="get" action="{{ url_for('results') }}">
+				<input type="text" name="searchterm" /><br />
+				<input type="submit" value="Search now" />
+				<input type="submit" value="Random Page" />
+			</form>	
+		</div>
+	</body>	
+</html>
