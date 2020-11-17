@@ -13,7 +13,7 @@ from sys import argv
 
 outputformat = "{id},{name},{release_year},[{developers}],[{publisher}],{img_url},{src_url},[{genres}],\"{description}\"\n"	#the format string for the output file writes
 starter = "https://en.wikipedia.org/w/api.php?action=parse&page="	#used for all queries
-URLstarter = "https://en.wikipedia.org/wiki/"	#used only for the file output
+URLstarter = "https://en.wikipedia.org"	#used only for the file output
 checkedPages = []
 
 #inputManagement
@@ -101,7 +101,7 @@ def Scrape(file):
 #the main function
 if (manageArgs()==0):
 	OutputFile = open(outputName,'a', encoding = "utf_16")
-	OutputFile.write("id,name,release_year,publisher,image,src,genres,description\n")
+	OutputFile.write("id,name,release_year,developers,publishers,image,src,genres,description\n")
 	Scrape(OutputFile);
 	OutputFile.close()
 	#Picture, Genres, Description = investigate_further("The_3-D_Battles_of_WorldRunner")
