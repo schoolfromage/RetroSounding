@@ -58,7 +58,7 @@ class MyWhooshSearch(object):
 	
 	def index(self):
 		schema = Schema(id=ID(stored=True), title=TEXT(stored=True), description=TEXT(stored=True))
-		indexer = create_in('exampleIndex', schema)
+		indexer = create_in('index', schema)
 		writer = indexer.writer()
 
 		writer.add_document(id=u'1', title=u'hello there', description=u'cs hello, how are you')
