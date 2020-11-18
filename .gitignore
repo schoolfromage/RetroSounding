@@ -5,4 +5,4 @@
 .DS_STORE
 
 #index
-GamesIndex/*
+backend/GamesIndex/*
