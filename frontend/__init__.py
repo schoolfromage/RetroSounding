@@ -3,6 +3,7 @@
 
 from flask import Flask, render_template, url_for, request
 import whoosh
+import whoosh.index as index
 from whoosh.index import create_in
 from whoosh.index import open_dir
 from whoosh.fields import *
@@ -27,9 +28,9 @@ def results():
 	keywordquery = data.get('searchterm')
 	print('Keyword Query is: ' + keywordquery)
 
-	titles, description = mysearch.search(keywordquery)
-	#TODO whoosh stuff
-	return render_template('results.html', query=keywordquery, results=zip(titles, description))
+	name, release_year, developers, publishers, images, sources, genres, description = mysearch.search(keywordquery)
+	print("name:" + str(name[0]))
+	return render_template('results.html', query=keywordquery, results=zip(name, release_year, developers, publishers, images, sources, genres, description))
 
 @app.route('/entry/', methods=['GET', 'POST'])
 def entry():
@@ -43,30 +44,36 @@ class MyWhooshSearch(object):
 		super(MyWhooshSearch, self).__init__()
 	
 	def search(self, queryEntered):
-		title = list()
+		name = list()
+		release_year = list()
+		developers = list()
+		publishers = list()
+		images = list()
+		sources = list()
+		genres = list()
 		description = list()
+		searchFields = ['name', 'release_year', 'developers', 'publishers', 'genres', 'description']
 		with self.indexer.searcher() as search:
-			query = MultifieldParser(['title', 'description'], schema=self.indexer.schema)
+			query = MultifieldParser(searchFields, schema=self.indexer.schema)
 			query = query.parse(queryEntered)
-			results = search.search(query, limit=None)
+			results = search.search(query, limit=2)
 
 			for x in results:
-				title.append(x['title'])
+				name.append(x['name'])
+				release_year.append(x['release_year'])
+				developers.append(x['developers'])
+				publishers.append(x['publishers'])
+				images.append(x['images'])
+				sources.append(x['sources'])
+				genres.append(x['genres'])
 				description.append(x['description'])
 
-		return title, description
+		return name, release_year, developers, publishers, images, sources, genres, description
 	
 	def index(self):
-		schema = Schema(id=ID(stored=True), title=TEXT(stored=True), description=TEXT(stored=True))
-		indexer = create_in('index', schema)
-		writer = indexer.writer()
-
-		writer.add_document(id=u'1', title=u'hello there', description=u'cs hello, how are you')
-		writer.add_document(id=u'2', title=u'hello bye', description=u'nice to meetcha')
-		writer.commit()
-
-		self.indexer = indexer
-
+		# schema = Schema(GID=ID(stored=True, unique=True),name=KEYWORD(stored=True),release_year=NUMERIC(stored=True),developers=KEYWORD(stored=True, commas=True),publishers=KEYWORD(stored=True, commas=True),images=KEYWORD(stored=True, commas=True),sources=KEYWORD(stored=True, commas=True),genres=KEYWORD(stored=True, commas=True),description=TEXT(stored=True))
+		idx = open_dir('../backend/GamesIndex')
+		self.indexer = idx
 # Create and run the app on http://127.0.0.1:5000/
 if __name__ == '__main__':
 	global mysearch

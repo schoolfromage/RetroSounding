@@ -27,7 +27,7 @@ if not index.exists_in(outputDir):
 else:
 	idx = index.open_dir(outputDir)	
 
-FileInput = open(inputFile, 'r', encoding = "utf_16");
+FileInput = open(inputFile, 'r', encoding = "utf_16")
 if not FileInput:
 	print("error file not read")
 List = FileInput.readlines()
@@ -36,7 +36,7 @@ for line in List[1:]:
 	LM = re.match(r'([^,]*),\[(.*)\],([^,]*),\[(.*)\],\[(.*)\],\[(.*)\],\[(.*)\],\[(.*)\],(".*")',line) #LM stands for LineMatch
 	if not LM:
 		print("error line not read", line)
-		break;
+		break
 	print (LM.group(1)+"\t"+LM.group(2))
 	idxwriter.update_document(GID=LM.group(1),name=LM.group(2),release_year=LM.group(3),developers=LM.group(4),publishers=LM.group(5),images=LM.group(6),sources=LM.group(7),genres=LM.group(8),description=LM.group(9))
 

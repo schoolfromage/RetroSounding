@@ -2,12 +2,12 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<link rel="stylesheet" href=" {{ url_for('static', filename='main.css')}} ">
+		<link rel="stylesheet" href=" {{ url_for('static', filename='styles/main.css')}} ">
 		<title>Retro-Sounding</title>
 	</head>
 
 	<body>
-		<img id='logo'  src=" {{ url_for('static', filename='images/logo.png')}} " alt="Logo alt text" />
+		<img id='logo'  src=" {{ url_for('static', filename='images/logo.PNG')}} " alt="Logo alt text" />
 		<div id="searchBar">
 			<form method="get" action="{{ url_for('results') }}">
 				<input type="text" name="searchterm" /><br />
