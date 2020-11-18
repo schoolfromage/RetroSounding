@@ -10,7 +10,6 @@ import time
 #for managing command line arguments
 from sys import argv
 
-
 outputformat = "{id},{name},{release_year},[{developers}],[{publisher}],{img_url},{src_url},[{genres}],\"{description}\"\n"	#the format string for the output file writes
 starter = "https://en.wikipedia.org/w/api.php?action=parse&page="	#used for all queries
 URLstarter = "https://en.wikipedia.org"	#used only for the file output
@@ -21,7 +20,7 @@ checkedPages = []
 def manageArgs():
 	if (len(argv)!=4):
 		print("wiki_to_csv.py [URL] [section #] [FILE]\n")
-		return -1;
+		return -1
 	else:
 		global mainPage
 		mainPage = argv[1]
@@ -29,7 +28,7 @@ def manageArgs():
 		sectionNumb = argv[2]
 		global outputName
 		outputName = argv[3]
-		return 0;
+		return 0
 
 def investigate_further(Name):
 	prompt = starter+Name+"&prop=text&format=json&redirects"
@@ -93,8 +92,8 @@ def Scrape(file):
 		#print("EUdate",tableData[i+5].text_content())
 		#print("rowend\n")
 		URL, Picture, Genres, Discription = investigate_further(Name.replace(" ","_"))	#get image, genres, and descriptions
-		i+=6;
-		j+=1;
+		i+=6
+		j+=1
 		outputString = outputformat.format(id = j,name = Name,release_year = year,developers = Devs,publisher = Publisher,img_url = Picture,genres = Genres, description = Discription, src_url=URL)
 		file.write(outputString)
 	
@@ -102,7 +101,7 @@ def Scrape(file):
 if (manageArgs()==0):
 	OutputFile = open(outputName,'a', encoding = "utf_16")
 	OutputFile.write("id,name,release_year,developers,publishers,image,src,genres,description\n")
-	Scrape(OutputFile);
+	Scrape(OutputFile)
 	OutputFile.close()
 	#Picture, Genres, Description = investigate_further("The_3-D_Battles_of_WorldRunner")
 	#print(Picture)
