@@ -40,7 +40,7 @@ class MyWhooshSearch(object):
 	"""docstring for MyWhooshSearch"""
 	def __init__(self):
 		super(MyWhooshSearch, self).__init__()
-	
+
 	def search(self, queryEntered):
 		name = list()
 		release_year = list()
@@ -51,6 +51,7 @@ class MyWhooshSearch(object):
 		genres = list()
 		description = list()
 		searchFields = ['name', 'release_year', 'developers', 'publishers', 'genres', 'description']
+		
 		with self.indexer.searcher() as search:
 			parser = MultifieldParser(searchFields, schema=self.indexer.schema)
 			query = parser.parse(queryEntered)

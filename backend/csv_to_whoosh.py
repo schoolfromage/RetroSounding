@@ -8,6 +8,7 @@ from sys import argv
 #this program expects the following format from the csvs:
 #id,[name],release_year,[developer(s)],[publisher(s)],[image(s)],[src(s)],[genre(s)],"description"
 
+# by default we want the output to be GamesIndex in the backend file
 inputFile = argv[1]
 outputDir = argv[2]
 
