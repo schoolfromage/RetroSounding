@@ -46,6 +46,7 @@ class MyWhooshSearch(object):
 		sources = list()
 		genres = list()
 		description = list()
+		# consoles = list()
 		searchFields = ['name', 'release_year', 'developers', 'publishers', 'genres', 'description']
 
 		with self.indexer.searcher() as search:
