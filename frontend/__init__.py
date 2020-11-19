@@ -55,7 +55,6 @@ class MyWhooshSearch(object):
 			results = search.search(query, limit=None)
 
 			for x in results:
-				print("x: " + str(x)) # this should show a result in the console but it shows nothing and I don't know why
 				name.append(x['name'])
 				release_year.append(x['release_year'])
 				developers.append(x['developers'])
