@@ -9,14 +9,15 @@
 	</head>
 
 	<body>
-		<!-- <img id='logo'  src=" {{ url_for('static', filename='images/logo.PNG') }} " alt="Logo alt text" /> -->
     <div id="wrapper">
-      <h1>Retro Sounding</h1>
+      <div class="h1"><h1>『Retro
+        Sounding  』</h1></div>
       <div id="searchBar">
         <form method="get" action="{{ url_for('results') }}">
-          <input class="searchBar" type="text" name="searchterm" />
-          <input class="submitBtn" type="submit" value="Search now" />
-          <input class="randomPageBtn" type="submit" value="Random Page" />
+          <!-- <span class="arrow">></span> -->
+          <label class="searchBar"><input type="text" name="searchterm" /></label>
+          <label class="btn submit"><input type="submit" value="Search now" /></label>
+          <label class="btn random"><input type="submit" value="Random Page" /></label>
         </form>
       </div>
     </div>
