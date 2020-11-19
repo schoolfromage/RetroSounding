@@ -1,29 +1,33 @@
-html {
-    background: #e6e9e9;
-    background-image: linear-gradient(270deg, rgb(230, 233, 233) 5%, rgb(216, 221, 221) 95%);
-    -webkit-font-smoothing: antialiased;
+@font-face {
+  font-family: 'AncientModernTales';
+  src: url('../fonts/AncientModernTales.woff2') format('woff2');
 }
-
-body {
-    background: #fff;
-    box-shadow: 0 0 2px rgba(0, 0, 0, 0.06);
-    color: #545454;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 24px;
-    line-height: 1.5;
-    margin: 0 auto;
-    max-width: 800px;
-    padding: 2em 2em 4em;
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: #2C2C2C;
+  -webkit-font-smoothing: auto;
+  color: #eee;
+  font-size: 16px;
 }
-
-h1, h2, h3, h4, h5, h6 {
-    color: #222;
-    font-weight: 600;
-    line-height: 1.3;
+::selection {
+  background: #eee;
+  color: #2C2C2C;
 }
-
-img {
-    transform: rotate(20deg);
-    height: 100px;
-    width: 100px;
+#wrapper {
+  margin: 0 auto;
+}
+h1 {
+  font-family: 'AncientModernTales', Arial, Helvetica, sans-serif;
+  font-size: 8rem;
+  letter-spacing: 1px;
+  text-align: center;
+}
+#searchbar {
+  margin: 0 auto;
+  display: block;
+}
+#searchbar form {
+  margin: 0 auto;
+  text-align: center;
 }
