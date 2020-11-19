@@ -3,12 +3,8 @@
 
 from flask import Flask, render_template, url_for, request
 import whoosh
-from whoosh.index import create_in
-from whoosh.index import open_dir
 from whoosh.fields import *
-from whoosh.qparser import QueryParser
 from whoosh.qparser import MultifieldParser
-from whoosh import qparser
 
 app = Flask(__name__)
 
@@ -27,8 +23,8 @@ def results():
 	keywordquery = data.get('searchterm')
 	print('Keyword Query is: ' + keywordquery)
 
-	name, release_year, developers, publishers, images, sources, genres, description = mysearch.search(keywordquery)
-	return render_template('results.html', query=keywordquery, results=zip(name, release_year, developers, publishers, images, sources, genres, description))
+	name, release_year = mysearch.search(keywordquery)
+	return render_template('results.html', query=keywordquery, results=zip(name, release_year))
 
 @app.route('/entry/', methods=['GET', 'POST'])
 def entry():
@@ -51,7 +47,7 @@ class MyWhooshSearch(object):
 		genres = list()
 		description = list()
 		searchFields = ['name', 'release_year', 'developers', 'publishers', 'genres', 'description']
-		
+
 		with self.indexer.searcher() as search:
 			parser = MultifieldParser(searchFields, schema=self.indexer.schema)
 			query = parser.parse(queryEntered)
@@ -68,7 +64,7 @@ class MyWhooshSearch(object):
 				genres.append(x['genres'])
 				description.append(x['description'])
 
-		return name, release_year, developers, publishers, images, sources, genres, description
+		return name, release_year
 	
 	def index(self):
 		# schema = Schema(GID=ID(stored=True, unique=True),name=KEYWORD(stored=True),release_year=NUMERIC(stored=True),developers=KEYWORD(stored=True, commas=True),publishers=KEYWORD(stored=True, commas=True),images=KEYWORD(stored=True, commas=True),sources=KEYWORD(stored=True, commas=True),genres=KEYWORD(stored=True, commas=True),description=TEXT(stored=True))

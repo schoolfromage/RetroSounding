@@ -40,4 +40,4 @@ for line in List[1:]:
 		break
 	print (LM.group(1)+"\t"+LM.group(2))
 	idxwriter.update_document(GID=LM.group(1),name=LM.group(2),release_year=LM.group(3),developers=LM.group(4),publishers=LM.group(5),images=LM.group(6),sources=LM.group(7),genres=LM.group(8),description=LM.group(9))
-
+idxwriter.commit()
