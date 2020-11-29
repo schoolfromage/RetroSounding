@@ -96,8 +96,8 @@ def Scrape(file):
 #	MainText = "<table class='wikitable'>Hello my name is <a>Pedro</a>, and I like crayons</table>"
 	store = lxml.html.fromstring(MainText)#turning the HTML text into a lxml etree
 	tableData = store.xpath("//table[@id='softwarelist']//tr")
-	i = 2071
-	for row in tableData[74:]:
+	i = 1999
+	for row in tableData:
 		data = row.findall(".//td")
 		if (len(data)>5):
 			Link = data[0].find(".//a[1]")
@@ -125,7 +125,7 @@ def Scrape(file):
 			URL, Picture, Genres2, Discription = investigate_further(Link)	#get image, genres, and descriptions
 			if Genres == None:#genres from the n64 list page seem to be more descriptive, so they will be default
 				Genres = Genres2
-			outputString = outputformat.format(id = i,name = Name,release_year = year,developers = Devs,publishers = Pubs,img_url = Picture,genres = Genres, description = Discription, src_url=URL, console = "NES")
+			outputString = outputformat.format(id = i,name = Name,release_year = year,developers = Devs,publishers = Pubs,img_url = Picture,genres = Genres, description = Discription, src_url=URL, console = "N64")
 			file.write(outputString)
 		else:
 			print("this row does not have enough data?")

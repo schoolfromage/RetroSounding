@@ -12,6 +12,13 @@ import time
 #for the format fixing
 import re
 
+#
+#note: the output for this file will have BOTH na release_year and pal release_year
+# the output was cleaned up after the fact
+# I can fix this error if people really want
+# -steven
+#
+
 starter = "https://en.wikipedia.org/w/api.php?action=parse&page="	#used for all queries
 URLstarter = "https://en.wikipedia.org/"	#used for the investigate_further and the URL
 
@@ -96,8 +103,8 @@ def Scrape(file):
 #	MainText = "<table class='wikitable'>Hello my name is <a>Pedro</a>, and I like crayons</table>"
 	store = lxml.html.fromstring(MainText)#turning the HTML text into a lxml etree
 	tableData = store.xpath("//table[@id='softwarelist']//tr")
-	i = 527
-	for row in tableData[529:]:
+	i = 0
+	for row in tableData[]:
 		data = row.findall(".//td")
 		if (len(data)>5):
 			Link = data[0].find(".//a[1]")

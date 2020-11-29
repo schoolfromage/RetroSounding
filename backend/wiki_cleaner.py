@@ -16,12 +16,15 @@ outputLines = []
 List = FileInput.readlines()
 outputLines.append(List[0])
 for line in List[1:]:
-	match = re.match(r'([^,]*),"(.*)",([^,]*),\[(.*)\],\[(.*)\],"(.*)","(.*)",\[(.*)\],([^,]*),"(.*)"',line)
+	match = re.match(r'([^,]*),"(.*)",([^,]*),([^,]*),\[(.*)\],\[(.*)\],"(.*)","(.*)",\[(.*)\],([^,]*),"(.*)"',line)
 	if match:
 		print(match.group(1),match.group(2))
-		console = 'N64'
+		year = match.group(3)
+		if (year > match.group(4) or year == 'n/a'):
+			if match.group(4)!='n/a':
+				year = match.group(4)
 		#genres = match.group(8).replace('[','')
-		outputLines.append(match.group(1)+','+'"'+match.group(2)+'"'+','+match.group(3)+','+'['+match.group(4)+']'+','+'['+match.group(5)+']'+','+'"'+match.group(6)+'"'+','+'"'+match.group(7)+'"'+','+'['+match.group(8)+']'+','+console+','+'"'+match.group(10)+'"'+'\n')
+		outputLines.append(match.group(1)+','+'"'+match.group(2)+'"'+','+year+','+'['+match.group(5)+']'+','+'['+match.group(6)+']'+','+'"'+match.group(7)+'"'+','+'"'+match.group(8)+'"'+','+'['+match.group(9)+']'+','+match.group(10)+','+'"'+match.group(10)+'"'+'\n')
 	else:
 		print("Error in match\n",line)
 		break;
