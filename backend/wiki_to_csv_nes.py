@@ -29,8 +29,21 @@ def manageArgs():
 		return 0
 
 		
-def investigate_further(Name):
-	prompt = starter+Name+"&prop=text&format=json&redirects"
+def investigate_further(Target):
+	if (Target == None):
+		return "n/a","n/a","n/a","n/a"#return junk
+	#split the section name (#) from the target
+	Split = Target.split('#')
+	Name = Split[0]
+	if (len(Split)>1):
+		SectionNumb = get_section_number(Name, Split[1])
+	else:
+		SectionNumb = None
+	if (SectionNumb == None):
+		prompt = starter+Name+"&prop=text&format=json&redirects"
+	else:
+		prompt = starter+Name+"&section="+SectionNumb+"&prop=text&format=json&redirects"
+	print(prompt)
 	time.sleep(0.5)
 	print("looking at ", Name)
 	req = requests.get(prompt)
@@ -57,7 +70,18 @@ def investigate_further(Name):
 		Discription = Paragraphs[0].text_content().replace("\n", "")+" \\n "+Paragraphs[1].text_content().replace("\n", "")
 	
 	return URL, Picture, Genres, Discription
-	
+
+def get_section_number(Name, Section):
+	prompt = starter+Name+"&prop=sections&format=json&redirects"
+	time.sleep(0.5)
+	req = requests.get(prompt)#the HTML request to wikipedia
+	Listfile = json.loads(req.text)#turning the JSON into a dictionary
+	if "error" in Listfile:
+		return None#the other function will print error codes
+	for item in Listfile["parse"]["sections"]:
+		if item["anchor"] == Section:
+			return item["number"]
+	return None
 	
 def Scrape(file):
 	outputformat = "{id},\"{name}\",{NArelease_year},{PALrelease_year},[{developers}],[{publishers}],\"{img_url}\",\"{src_url}\",[{genres}],{console},\"{description}\"\n"	#the format string for the output file writes
@@ -70,10 +94,10 @@ def Scrape(file):
 		return
 	MainText = Listfile["parse"]["text"]['*']#turning the dictionary into HTML text
 #	MainText = "<table class='wikitable'>Hello my name is <a>Pedro</a>, and I like crayons</table>"
-	store = etree.parse(StringIO(MainText), parser)#turning the HTML text into a lxml etree
+	store = lxml.html.fromstring(MainText)#turning the HTML text into a lxml etree
 	tableData = store.xpath("//table[@id='softwarelist']//tr")
-	i = 0
-	for row in tableData:
+	i = 527
+	for row in tableData[529:]:
 		data = row.findall(".//td")
 		if (len(data)>5):
 			Link = data[0].find(".//a[1]")
@@ -81,18 +105,12 @@ def Scrape(file):
 				Name = Link.attrib['title'].replace("(video game)","")
 				Link = Link.attrib['href'].replace("/wiki/","")
 			else:
-				Name = data[0].findtext(".").replace("\n", "").replace("(video game)","")#some wiki pages need the extra tag; we don't
-			#print(Link)
+				Name = data[0].text_content().replace("\n", "").replace("(video game)","")#some wiki pages need the extra tag; we don't
 			print(Name)
-			Devs = data[1].findtext(".").replace("\n", "")
-			#result = etree.tostring(data[1],pretty_print=True, method="html")
-			#print(result)
-			#print(Devs)
-			NAPub = data[2].findtext(".").replace("\n", "")
-			#print(NAPub)
-			PALPub = data[3].findtext(".").replace("\n", "")
-			#print(PALPub)
-			NAyear = data[4].findtext(".")
+			Devs = data[1].text_content().replace("\n", "")
+			NAPub = data[2].text_content().replace("\n", "")
+			PALPub = data[3].text_content().replace("\n", "")
+			NAyear = data[4].text_content()
 			if (NAyear != None and NAyear != "Unreleased"):
 				match = re.match(r'.*([0-9]{4})',NAyear)
 				if match!=None:
@@ -101,8 +119,7 @@ def Scrape(file):
 					NAyear = "n/a"
 			else:
 				NAyear = "n/a"
-			#print(NAyear)
-			PALyear = data[5].findtext(".//*")
+			PALyear = data[5].text_content()
 			if (PALyear != None and PALyear != "Unreleased"):
 				match = re.match(r'.*([0-9]{4})',PALyear)#find and only save the 4 sequencial numbers
 				if match!=None:
@@ -111,8 +128,7 @@ def Scrape(file):
 					PALyear = "n/a"
 			else:
 				PALyear = "n/a"
-			#print(PALyear)
-			#put togheter Pubs:
+			#put together Pubs:
 			if (NAPub!="Unreleased" and NAPub!=None):
 				if (PALPub!="Unreleased" and PALPub!=None):
 					Publisher = NAPub+","+PALPub
@@ -137,10 +153,12 @@ def Scrape(file):
 #The main function
 if (manageArgs()==0):
 	OutputFile = open(outputName,'a', encoding = "utf_16")
-	OutputFile.write("id,name,NArelease_year,PALrelease_year,developers,publishers,image,src,genres,console,description\n")
+	#OutputFile.write("id,name,NArelease_year,PALrelease_year,developers,publishers,image,src,genres,console,description\n")
 	Scrape(OutputFile)
 	OutputFile.close()
 	#Picture, Genres, Description = investigate_further("The_3-D_Battles_of_WorldRunner")
 	#print(Picture)
 	#print(Genres)
 	#print(Description)
+	#test = get_section_number("apple","Cultivars")
+	#print(test)

@@ -14,6 +14,7 @@ if not FileInput:
 	print("error file not read")
 outputLines = []
 List = FileInput.readlines()
+outputLines.append(List[0])
 for line in List[1:]:
 	match = re.match(r'([^,]*),\[(.*)\],([^,]*),\[(.*)\],\[(.*)\],\[(.*)\],\[(.*)\],\[(.*)\],(".*")',line)
 	if match:
