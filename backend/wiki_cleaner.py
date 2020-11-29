@@ -16,13 +16,12 @@ outputLines = []
 List = FileInput.readlines()
 outputLines.append(List[0])
 for line in List[1:]:
-	match = re.match(r'([^,]*),\[(.*)\],([^,]*),\[(.*)\],\[(.*)\],\[(.*)\],\[(.*)\],\[(.*)\],(".*")',line)
+	match = re.match(r'([^,]*),"(.*)",([^,]*),\[(.*)\],\[(.*)\],"(.*)","(.*)",\[(.*)\],([^,]*),"(.*)"',line)
 	if match:
 		print(match.group(1),match.group(2))
-		picture = match.group(6).replace('wiki//wiki','wiki');
-		genres = match.group(8).replace('[','')
-		genres = genres.replace(']','')
-		outputLines.append(match.group(1)+','+'['+match.group(2)+']'+','+match.group(3)+','+'['+match.group(4)+']'+','+'['+match.group(5)+']'+','+'['+picture+']'+','+'['+match.group(7)+']'+','+'['+genres+']'+','+match.group(9)+'\n')
+		console = 'N64'
+		#genres = match.group(8).replace('[','')
+		outputLines.append(match.group(1)+','+'"'+match.group(2)+'"'+','+match.group(3)+','+'['+match.group(4)+']'+','+'['+match.group(5)+']'+','+'"'+match.group(6)+'"'+','+'"'+match.group(7)+'"'+','+'['+match.group(8)+']'+','+console+','+'"'+match.group(10)+'"'+'\n')
 	else:
 		print("Error in match\n",line)
 		break;
