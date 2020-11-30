@@ -83,6 +83,16 @@ def get_section_number(Name, Section):
 			return item["number"]
 	return None
 	
+def cleanup_year(year):#finds the first sequence of 4 numbers for a year
+	if (year != None):
+		match = re.match(r'.*([0-9]{4}).*',year)
+		if match!=None:
+			return match.group(1)#find and only save the 4 sequencial numbers
+		else:
+			return "n/a"
+	else:
+		return "n/a"
+	
 def Scrape(file):
 	outputformat = "{id},\"{name}\",{release_year},[{developers}],[{publishers}],\"{img_url}\",\"{src_url}\",[{genres}],{console},\"{description}\"\n"	#the format string for the output file writes
 	prompt = starter+mainPage+"&section="+sectionNumb+"&prop=text&format=json&redirects"
@@ -96,7 +106,7 @@ def Scrape(file):
 #	MainText = "<table class='wikitable'>Hello my name is <a>Pedro</a>, and I like crayons</table>"
 	store = lxml.html.fromstring(MainText)#turning the HTML text into a lxml etree
 	tableData = store.xpath("//table[@id='softwarelist']//tr")
-	i = 1999
+	i = 2999
 	for row in tableData:
 		data = row.findall(".//td")
 		if (len(data)>5):
@@ -109,23 +119,21 @@ def Scrape(file):
 			print(Name)
 			Devs = data[1].text_content().replace("\n", "")
 			Pubs = data[2].text_content().replace("\n", "")
-			Genres = data[3].text_content().replace("\n", "").replace("\\",",")
-			year = data[4].text_content()
-			if (year != None):
-				match = re.match(r'.*([0-9]{4}).*',year)
-				if match!=None:
-					year = match.group(1)#find and only save the 4 sequencial numbers
-				else:
-					year = "n/a"
-			else:
-				year = "n/a"
-			if (year=="Unreleased"):
-				continue#if neither objects are there this must be an unreleased game
+			JPYear = cleanup_year(data[3].text_content())
+			NAYear = cleanup_year(data[4].text_content())
+			PALYear = cleanup_year(data[5].text_content())
+			year = '9999'
+			if (JPYear < year and JPYear!='n/a'):
+				year = JPYear
+			if (NAYear < year and NAYear!='n/a'):
+				year = NAYear
+			if (PALYear < year and PALYear!='n/a'):
+				year = PALYear
+			if (year == '9999'):
+				year = 'n/a'
 			i+=1
-			URL, Picture, Genres2, Discription = investigate_further(Link)	#get image, genres, and descriptions
-			if Genres == None:#genres from the n64 list page seem to be more descriptive, so they will be default
-				Genres = Genres2
-			outputString = outputformat.format(id = i,name = Name,release_year = year,developers = Devs,publishers = Pubs,img_url = Picture,genres = Genres, description = Discription, src_url=URL, console = "N64")
+			URL, Picture, Genres, Discription = investigate_further(Link)	#get image, genres, and descriptions
+			outputString = outputformat.format(id = i,name = Name,release_year = year,developers = Devs,publishers = Pubs,img_url = Picture,genres = Genres, description = Discription, src_url=URL, console = "GB")
 			file.write(outputString)
 		else:
 			print("this row does not have enough data?")

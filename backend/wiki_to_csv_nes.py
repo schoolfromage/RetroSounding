@@ -12,12 +12,6 @@ import time
 #for the format fixing
 import re
 
-#
-#note: the output for this file will have BOTH na release_year and pal release_year
-# the output was cleaned up after the fact
-# I can fix this error if people really want
-# -steven
-#
 
 starter = "https://en.wikipedia.org/w/api.php?action=parse&page="	#used for all queries
 URLstarter = "https://en.wikipedia.org/"	#used for the investigate_further and the URL
@@ -50,9 +44,7 @@ def investigate_further(Target):
 		prompt = starter+Name+"&prop=text&format=json&redirects"
 	else:
 		prompt = starter+Name+"&section="+SectionNumb+"&prop=text&format=json&redirects"
-	print(prompt)
 	time.sleep(0.5)
-	print("looking at ", Name)
 	req = requests.get(prompt)
 	Listfile = json.loads(req.text)
 	if "error" in Listfile:
@@ -91,7 +83,7 @@ def get_section_number(Name, Section):
 	return None
 	
 def Scrape(file):
-	outputformat = "{id},\"{name}\",{NArelease_year},{PALrelease_year},[{developers}],[{publishers}],\"{img_url}\",\"{src_url}\",[{genres}],{console},\"{description}\"\n"	#the format string for the output file writes
+	outputformat = "{id},\"{name}\",{release_year},[{developers}],[{publishers}],\"{img_url}\",\"{src_url}\",[{genres}],{console},\"{description}\"\n"	#the format string for the output file writes
 	prompt = starter+mainPage+"&section="+sectionNumb+"&prop=text&format=json&redirects"
 	parser = etree.XMLParser(encoding='utf-8', recover=True)
 	req = requests.get(prompt)#the HTML request to wikipedia
@@ -104,12 +96,12 @@ def Scrape(file):
 	store = lxml.html.fromstring(MainText)#turning the HTML text into a lxml etree
 	tableData = store.xpath("//table[@id='softwarelist']//tr")
 	i = 0
-	for row in tableData[]:
+	for row in tableData:
 		data = row.findall(".//td")
 		if (len(data)>5):
 			Link = data[0].find(".//a[1]")
 			if Link!=None:
-				Name = Link.attrib['title'].replace("(video game)","")
+				Name = Link.text_content().replace("(video game)","")
 				Link = Link.attrib['href'].replace("/wiki/","")
 			else:
 				Name = data[0].text_content().replace("\n", "").replace("(video game)","")#some wiki pages need the extra tag; we don't
@@ -148,9 +140,13 @@ def Scrape(file):
 					continue #if neither objects are there this must be an unreleased game
 			if (NAyear=="Unreleased" and PALyear=="Unreleased"):
 				continue#if neither objects are there this must be an unreleased game
+			if (NAyear<PALyear and NAyear !="Unreleased"):
+				year = NAyear
+			else:
+				year = PALyear
 			i+=1
 			URL, Picture, Genres, Discription = investigate_further(Link)	#get image, genres, and descriptions
-			outputString = outputformat.format(id = i,name = Name,NArelease_year = NAyear,PALrelease_year = PALyear,developers = Devs,publishers = Publisher,img_url = Picture,genres = Genres, description = Discription, src_url=URL, console = "NES")
+			outputString = outputformat.format(id = i,name = Name,release_year = year,developers = Devs,publishers = Publisher,img_url = Picture,genres = Genres, description = Discription, src_url=URL, console = "NES")
 			file.write(outputString)
 		else:
 			print("this row does not have enough data?")
@@ -160,7 +156,7 @@ def Scrape(file):
 #The main function
 if (manageArgs()==0):
 	OutputFile = open(outputName,'a', encoding = "utf_16")
-	#OutputFile.write("id,name,NArelease_year,PALrelease_year,developers,publishers,image,src,genres,console,description\n")
+	OutputFile.write("id,name,release_year,developers,publishers,image,src,genres,console,description\n")
 	Scrape(OutputFile)
 	OutputFile.close()
 	#Picture, Genres, Description = investigate_further("The_3-D_Battles_of_WorldRunner")
