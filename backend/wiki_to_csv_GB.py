@@ -59,6 +59,8 @@ def investigate_further(Target):
 		Picture = "n/a"
 	Genres = store.xpath("//th/a[text()='Genre(s)']/../following::td[1]//text()")
 	Genres = [item for item in Genres if item != ' ']
+	if Genres == "[]":
+		Genres = "n/a"
 	Paragraphs = store.xpath("//h2/span[@id='Gameplay']/../following::p[position()<=2]")
 	if len(Paragraphs)==0:#if no "gameplay" section just default to front
 		Paragraphs = store.xpath("//div[@class='mw-parser-output']/p[position()<=2]")
@@ -94,7 +96,7 @@ def cleanup_year(year):#finds the first sequence of 4 numbers for a year
 		return "n/a"
 	
 def Scrape(file):
-	outputformat = "{id},\"{name}\",{release_year},[{developers}],[{publishers}],\"{img_url}\",\"{src_url}\",[{genres}],{console},\"{description}\"\n"	#the format string for the output file writes
+	outputformat = "{id},\"{name}\",{release_year},[{developers}],[{publishers}],\"{img_url}\",[{src_url}],[{genres}],[{console}],\"{description}\"\n"	#the format string for the output file writes
 	prompt = starter+mainPage+"&section="+sectionNumb+"&prop=text&format=json&redirects"
 	parser = etree.XMLParser(encoding='utf-8', recover=True)
 	req = requests.get(prompt)#the HTML request to wikipedia
@@ -118,7 +120,11 @@ def Scrape(file):
 				Name = data[0].text_content().replace("\n", "").replace("(video game)","")#some wiki pages need the extra tag; we don't
 			print(Name)
 			Devs = data[1].text_content().replace("\n", "")
+			if Devs == "":
+				Devs = 'n/a'
 			Pubs = data[2].text_content().replace("\n", "")
+			if Pubs == "":
+				Pubs = 'n/a'
 			JPYear = cleanup_year(data[3].text_content())
 			NAYear = cleanup_year(data[4].text_content())
 			PALYear = cleanup_year(data[5].text_content())
