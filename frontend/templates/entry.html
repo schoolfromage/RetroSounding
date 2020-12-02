@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href=" {{ url_for('static', filename='images/favicon.ico') }} ">
     <link rel="stylesheet" href=" {{ url_for('static', filename='styles/main.css')}} ">
-    <title>Entry</title>
+    <title>{{ name }}</title>
   </head>
   <body>
-  
+    <h1>{{ name }}</h1>
+    <p>{{ description }}</p>
   </body>
 </html>

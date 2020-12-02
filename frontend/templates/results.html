@@ -5,15 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href=" {{ url_for('static', filename='images/favicon.ico') }} ">
     <link rel="stylesheet" href=" {{ url_for('static', filename='styles/main.css')}} ">
-		<title>Results</title>
+		<title>Search results for {{ query }}</title>
 	</head>
 
 	<body>
-
-		<h2>
-			<div id='redText'>You</div> <div class='blueText'>searched</div> for: {{query}}
-		</h2>
-		
+		<h2> You searched for: {{ query }}</h2>
 		<table>
 			<thead>
 				<tr>
@@ -23,10 +19,17 @@
 				</tr>
 			</thead>
 			<tbody>
-				{% for n, r in results %}
+				{% for n, r, p, gid in results %}
 				<tr>
 					<td>{{n}}</td>
           <td>{{r}}</td>
+          <td>{{p}}</td>
+          <td>
+            <form method="post" action="{{ url_for('entry') }}">
+              <input class="gone" type="text" name="gid" value="{{ gid }}">
+              <input type="submit" value="Info"/>
+            </form>
+          </td>
 				</tr>
 				{% endfor %}
 			</tbody>
