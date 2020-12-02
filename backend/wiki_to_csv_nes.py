@@ -12,7 +12,7 @@ import time
 #for the format fixing
 import re
 
-
+#Steven A
 starter = "https://en.wikipedia.org/w/api.php?action=parse&page="	#used for all queries
 URLstarter = "https://en.wikipedia.org/"	#used for the investigate_further and the URL
 
@@ -52,7 +52,7 @@ def investigate_further(Target):
 		return "n/a","n/a","n/a","n/a"
 	Text = Listfile["parse"]["text"]["*"]
 	store = lxml.html.fromstring(Text)
-	URL = URLstarter+Listfile["parse"]["title"]
+	URL = URLstarter+Listfile["parse"]["title"].replace(' ','_')
 	TempList = store.xpath("//a[@class='image']/@href")
 	if len(TempList)>=1:
 		Picture =  URLstarter+TempList[0]
@@ -102,7 +102,7 @@ def Scrape(file):
 			Link = data[0].find(".//a[1]")
 			if Link!=None:
 				Name = Link.text_content().replace("(video game)","")
-				Link = Link.attrib['href'].replace("/wiki/","")
+				Link = Link.attrib['href']
 			else:
 				Name = data[0].text_content().replace("\n", "").replace("(video game)","")#some wiki pages need the extra tag; we don't
 			print(Name)
