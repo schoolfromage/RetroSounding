@@ -36,8 +36,16 @@ def entry():
 	
 	gid = data.get('gid')
 
-	name, release_year, developers, publishers, images, sources, genres, description = mysearch.retrieve(gid)
-	return render_template('entry.html', name=name, release_year=release_year, developers=developers, publishers=publishers, images=images, sources=sources, genres=genres, description=description)
+	name, release_year, developers, publishers, images, sources, genres, description, consoles = mysearch.retrieve(gid)
+	#print(name)
+	#print(release_year)
+	#print(developers)
+	#print(publishers)
+	#print(images)
+	#print(sources)
+	#print(genres)
+	#print(description)
+	return render_template('entry.html', name=name, release_year=release_year, developers=developers, publishers=publishers, images=images, sources=sources, genres=genres, description=description, consoles=consoles)
 
 class MyWhooshSearch(object):
 	"""docstring for MyWhooshSearch"""
@@ -54,8 +62,8 @@ class MyWhooshSearch(object):
 		genres = list()
 		description = list()
 		gids = list()
-		# consoles = list()
-		searchFields = ['name', 'release_year', 'developers', 'publishers', 'genres', 'description']
+		consoles = list()
+		searchFields = ['name', 'release_year', 'developers', 'publishers', 'genres', 'description', 'consoles']
 
 		with self.indexer.searcher() as search:
 			parser = MultifieldParser(searchFields, schema=self.indexer.schema)
@@ -71,6 +79,7 @@ class MyWhooshSearch(object):
 				sources.append(x['sources'])
 				genres.append(x['genres'])
 				description.append(x['description'])
+				consoles.append(x['consoles'])
 				gids.append(x['GID'])
 
 		return name, release_year, publishers, gids
@@ -79,7 +88,6 @@ class MyWhooshSearch(object):
 			parser = MultifieldParser(['GID'], schema=self.indexer.schema)
 			query = parser.parse(str(gid))
 			result = search.search(query, limit=None)
-			print(result)
 
 			name = result[0]['name']
 			release_year = result[0]['release_year']
@@ -89,11 +97,11 @@ class MyWhooshSearch(object):
 			sources = result[0]['sources']
 			genres = result[0]['genres']
 			description = result[0]['description']
+			consoles = result[0]['consoles']
 
-		return name, release_year, developers, publishers, images, sources, genres, description
+		return name, release_year, developers, publishers, images, sources, genres, description, consoles
 
 	def index(self):
-		# schema = Schema(GID=ID(stored=True, unique=True),name=KEYWORD(stored=True),release_year=NUMERIC(stored=True),developers=KEYWORD(stored=True, commas=True),publishers=KEYWORD(stored=True, commas=True),images=KEYWORD(stored=True, commas=True),sources=KEYWORD(stored=True, commas=True),genres=KEYWORD(stored=True, commas=True),description=TEXT(stored=True))
 		if whoosh.index.exists_in("./backend/GamesIndex"):
 			self.indexer = whoosh.index.open_dir('./backend/GamesIndex')
 		else: 

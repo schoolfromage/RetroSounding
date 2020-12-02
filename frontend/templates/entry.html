@@ -10,5 +10,12 @@
   <body>
     <h1>{{ name }}</h1>
     <p>{{ description }}</p>
+    <form method="get" action="{{ url_for('results') }}">
+      <label class="gone"><input type="text" name="searchterm" value="{{ name }}, {{ genres }}"/></label>
+      <label><input type="submit" value="Related Games"/></label>
+    </form>
+		<form method="post" action="{{ url_for('index') }}">
+			<input type="submit" value="Search Page"/>
+		</form>	
   </body>
 </html>
