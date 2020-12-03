@@ -5,7 +5,10 @@ from flask import Flask, render_template, url_for, request
 import whoosh
 from whoosh.fields import *
 from whoosh.qparser import MultifieldParser
-from random import randint
+from random import randint#used for the random page button
+
+from whoosh.query import And, Or, Not, Term#used for the relevent result custom query
+import re #used for the query management
 
 app = Flask(__name__)
 
@@ -89,14 +92,24 @@ class MyWhooshSearch(object):
 		gids = list()
 		consoles = list()
 		# start of if related
-
-		if(queryEntered.split(':')[0] == "related"):
-			rname, rrelease_year, rdevelopers, rpublishers, rimages, rsources, rgenres, rdescription, rconsoles = self.retrieve(queryEntered.split(':')[1])
-			# from here you can add the actual search and change the "queryEntered" value before it actually goes into the search stuff below
-			
-		with self.indexer.searcher() as search:
-			parser = MultifieldParser(fields, schema=self.indexer.schema)
+		query = None#temp value - this value is alwayse changed before the search
+		relatedMatch =re.match(r'(.*)related:(\w*)(.*)',queryEntered)#0=whole match, 1=before, 2=data, 3=after for match.group(#)
+		if(relatedMatch):
+			parser = MultifieldParser(searchFields, schema=self.indexer.schema)#this is used for both related queries and reqular ones
+			with self.indexer.searcher() as search:
+				relatedDoc = search.document(GID = relatedMatch.group(2))#looks for the gid of the thing after the collon
+				print(relatedDoc['name'])
+				if relatedDoc:#document will return None if the gid is invalid
+					relatedTerms = Or([ Term('consoles',relatedDoc['consoles'].lower(),boost=0.7),
+						Term('genres',relatedDoc['genres'].lower(), boost=2),
+						Term('developers',relatedDoc['developers'].lower(), boost=1),
+						Term('publishers',relatedDoc['publishers'].lower(), boost=0.9)],
+						scale=0.5)#defines how well a doc is boosted for having many different qualities
+					query = And([relatedTerms,Not(Term('GID',relatedDoc['GID']))])
+		if query == None:#ie: if the query was not already overwritten
 			query = parser.parse(queryEntered)
+		print(query)
+		with self.indexer.searcher() as search:
 			results = search.search(query, limit=None)
 
 			for x in results:
