@@ -1,8 +1,9 @@
 #pycache files
-.pyc
+*.pyc
 
 #Macintosh files
 .DS_STORE
 
 #index
 #backend/GamesIndex/*
+wsgi.py
