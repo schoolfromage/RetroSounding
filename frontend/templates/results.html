@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href=" {{ url_for('static', filename='images/favicon.ico') }} ">
-    <link rel="stylesheet" href=" {{ url_for('static', filename='styles/main.css')}} ">
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="icon" type="image/x-icon" href=" {{ url_for('static', filename='images/favicon.ico') }} ">
+		<link rel="stylesheet" href=" {{ url_for('static', filename='styles/main.css')}} ">
 		<title>Search results for {{ query }}</title>
 	</head>
 
@@ -14,26 +14,32 @@
 			<thead>
 				<tr>
 					<th>Name</th>
-          <th>Release Year</th>
-          <th>Publishers</th>
+					<th>Release Year</th>
+					<th>Publishers</th>
 				</tr>
 			</thead>
 			<tbody>
-				{% for n, r, p, gid in results %}
+				{% for n, r, p, gid, img in results %}
 				<tr>
-					<td>{{n}}</td>
-          <td>{{r}}</td>
-          <td>{{p}}</td>
-          <td>
-            <form method="post" action="{{ url_for('entry') }}">
-              <input class="gone" type="text" name="gid" value="{{ gid }}">
-              <input type="submit" value="Info"/>
-            </form>
-          </td>
+					<td><div class="thumb"><img src="{{ img }}"/></div>>{{n}}</td>
+					<td>{{r}}</td>
+					<td>{{p}}</td>
+					<td>
+						<form method="post" action="{{ url_for('entry') }}">
+							<input class="gone" type="text" name="gid" value="{{ gid }}">
+							<input type="submit" value="Info"/>
+						</form>
+					</td>
 				</tr>
 				{% endfor %}
 			</tbody>
 		</table>
+		<form method="post" action="{{ url_for('index') }}">
+			<input type="submit" value="Previous" />
+		</form>
+		<form method="post" action="{{ url_for('index') }}">
+			<input type="submit" value="Next" />
+		</form>
 		<form method="post" action="{{ url_for('index') }}">
 			<input type="submit" value="Search Page" />
 		</form>

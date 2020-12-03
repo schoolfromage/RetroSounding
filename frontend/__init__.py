@@ -46,8 +46,8 @@ def results():
 	if data.get('consoles'):
 		fields.append('consoles')
 
-	name, release_year, publishers, gids = mysearch.search(keywordquery, fields)
-	return render_template('results.html', query=keywordquery, results=zip(name, release_year, publishers, gids))
+	name, release_year, publishers, gids, images = mysearch.search(keywordquery, fields)
+	return render_template('results.html', query=keywordquery, results=zip(name, release_year, publishers, gids, images))
 
 @app.route('/entry/', methods=['GET', 'POST'])
 def entry():
@@ -111,7 +111,7 @@ class MyWhooshSearch(object):
 				consoles.append(x['consoles'])
 				gids.append(x['GID'])
 
-		return name, release_year, publishers, gids
+		return name, release_year, publishers, gids, images
 
 	def retrieve(self, gid):
 		with self.indexer.searcher() as search:
