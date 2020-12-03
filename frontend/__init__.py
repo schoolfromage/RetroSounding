@@ -103,6 +103,7 @@ class MyWhooshSearch(object):
 			result = search.search(query, limit=None)
 			if len(result) == 0:
 				return None, None, None, None, None, None, None, None, None
+
 			name = result[0]['name']
 			release_year = result[0]['release_year']
 			developers = result[0]['developers']
@@ -127,4 +128,3 @@ if __name__ == '__main__':
 	mysearch = MyWhooshSearch()
 	mysearch.index()
 	app.run(debug=True)
-	
