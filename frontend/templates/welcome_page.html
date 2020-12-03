@@ -15,9 +15,10 @@
         <form method="get" action="{{ url_for('results') }}">
           <label class="searchBar"><input type="text" name="searchterm" /></label>
           <label class="btn submit"><input type="submit" value="Search now" /></label>
-          <label class="btn random"><input type="submit" value="Random Page" /></label>
+          <label class="btn random"><input type="submit" value="Random Page" onClick="random()"/></label>
         </form>
+        <script>const random = () => {document.getElementsByClassName('searchBar')[0].children[0].value = ''}</script>
       </div>
     </div>
-	</body>	
+	</body>
 </html>

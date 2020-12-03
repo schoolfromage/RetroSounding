@@ -5,6 +5,7 @@ from flask import Flask, render_template, url_for, request
 import whoosh
 from whoosh.fields import *
 from whoosh.qparser import MultifieldParser
+from random import randint
 
 app = Flask(__name__)
 
@@ -21,6 +22,12 @@ def results():
 		data = request.args
 
 	keywordquery = data.get('searchterm')
+	if not keywordquery:
+		gid = randint(0,5000)
+		name, release_year, developers, publishers, images, sources, genres, description, consoles = mysearch.retrieve(gid)
+		while not name:
+			name, release_year, developers, publishers, images, sources, genres, description, consoles = mysearch.retrieve(randint(0,5000))
+		return render_template('entry.html', gid=gid, name=name, release_year=release_year, developers=developers, publishers=publishers, images=images, sources=sources, genres=genres, description=description, consoles=consoles)
 	print('Keyword Query is: ' + keywordquery)
 
 	name, release_year, publishers, gids = mysearch.search(keywordquery)
@@ -94,7 +101,8 @@ class MyWhooshSearch(object):
 			parser = MultifieldParser(['GID'], schema=self.indexer.schema)
 			query = parser.parse(str(gid))
 			result = search.search(query, limit=None)
-
+			if len(result) == 0:
+				return None, None, None, None, None, None, None, None, None
 			name = result[0]['name']
 			release_year = result[0]['release_year']
 			developers = result[0]['developers']
