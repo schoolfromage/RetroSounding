@@ -45,7 +45,7 @@ def entry():
 	#print(sources)
 	#print(genres)
 	#print(description)
-	return render_template('entry.html', name=name, release_year=release_year, developers=developers, publishers=publishers, images=images, sources=sources, genres=genres, description=description, consoles=consoles)
+	return render_template('entry.html', gid=gid, name=name, release_year=release_year, developers=developers, publishers=publishers, images=images, sources=sources, genres=genres, description=description, consoles=consoles)
 
 class MyWhooshSearch(object):
 	"""docstring for MyWhooshSearch"""
@@ -64,7 +64,12 @@ class MyWhooshSearch(object):
 		gids = list()
 		consoles = list()
 		searchFields = ['name', 'release_year', 'developers', 'publishers', 'genres', 'description', 'consoles']
+		# start of if related
 
+		if(queryEntered.split(':')[0] == "related"):
+			rname, rrelease_year, rdevelopers, rpublishers, rimages, rsources, rgenres, rdescription, rconsoles = self.retrieve(queryEntered.split(':')[1])
+			# from here you can add the actual search and change the "queryEntered" value before it actually goes into the search stuff below
+			
 		with self.indexer.searcher() as search:
 			parser = MultifieldParser(searchFields, schema=self.indexer.schema)
 			query = parser.parse(queryEntered)
@@ -83,6 +88,7 @@ class MyWhooshSearch(object):
 				gids.append(x['GID'])
 
 		return name, release_year, publishers, gids
+
 	def retrieve(self, gid):
 		with self.indexer.searcher() as search:
 			parser = MultifieldParser(['GID'], schema=self.indexer.schema)
