@@ -26,7 +26,7 @@
 					<td>{{p}}</td>
 					<td>
 						<form method="post" action="{{ url_for('entry') }}">
-							<input class="gone" type="text" name="gid" value="{{ gid }}">
+							<input style="display:none" type="text" name="gid" value="{{ gid }}">
 							<input type="submit" value="Info"/>
 						</form>
 					</td>
@@ -34,14 +34,24 @@
 				{% endfor %}
 			</tbody>
 		</table>
-		<form method="post" action="{{ url_for('index') }}">
-			<input type="submit" value="Previous" />
+		<form method="post" action="{{ url_for('results') }}">
+      <input style="display: none;" type="text" value="{{ p - 1 }}" name="pp">
+      <input style="display: none;" type="text" value="{{ query }}" name="searchterm">
+			<input id="pp" type="submit" value="{{ p - 1  }}" />
 		</form>
-		<form method="post" action="{{ url_for('index') }}">
-			<input type="submit" value="Next" />
+    <form method="post" action="{{ url_for('results') }}">
+      <input style="display: none;" type="text" value="{{ p + 1 }}" name="np">
+      <input style="display: none;" type="text" value="{{ query }}" name="searchterm">
+			<input id="np" type="submit" value="{{ p + 1 }}" />
 		</form>
 		<form method="post" action="{{ url_for('index') }}">
 			<input type="submit" value="Search Page" />
-		</form>
+    </form>
+    <script type="text/javascript">
+      document.addEventListener("DOMContentLoaded", () => {
+        if (document.getElementsByTagName('tr').length < 20) { 'np'.style = "display:none" }
+        if (pp.value == '0') { pp.style = "display:none" }
+      })
+    </script>
 	</body>	
 </html>

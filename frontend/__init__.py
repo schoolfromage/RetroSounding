@@ -48,9 +48,17 @@ def results():
 		fields.append('description')
 	if data.get('consoles'):
 		fields.append('consoles')
-
-	name, release_year, publishers, gids, images = mysearch.search(keywordquery, fields)
-	return render_template('results.html', query=keywordquery, results=zip(name, release_year, publishers, gids, images))
+	
+	ppage = data.get('pp')
+	npage = data.get('np')
+	page = 1
+	if ppage:
+		page = int(ppage)
+	if npage:
+		page = int(npage)
+	print(page)
+	name, release_year, publishers, gids, images, page = mysearch.search(keywordquery, fields, page)
+	return render_template('results.html', p=page, query=keywordquery, results=zip(name, release_year, publishers, gids, images))
 
 @app.route('/entry/', methods=['GET', 'POST'])
 def entry():
@@ -78,8 +86,8 @@ class MyWhooshSearch(object):
 	def __init__(self):
 		super(MyWhooshSearch, self).__init__()
 
-	def search(self, queryEntered, fields):
-		if not fields:
+	def search(self, queryEntered, fields, page):
+		if not fields or fields == '_':
 			fields = ['name', 'release_year', 'developers', 'publishers', 'genres', 'description', 'consoles']
 		name = list()
 		release_year = list()
@@ -112,7 +120,7 @@ class MyWhooshSearch(object):
 			print(query)
 
 		with self.indexer.searcher() as search:
-			results = search.search(query, limit=None)
+			results = search.search_page(query, page, pagelen=20)
 
 			for x in results:
 				name.append(x['name'])
@@ -126,7 +134,7 @@ class MyWhooshSearch(object):
 				consoles.append(x['consoles'])
 				gids.append(x['GID'])
 
-		return name, release_year, publishers, gids, images
+		return name, release_year, publishers, gids, images, page
 
 	def retrieve(self, gid):
 		with self.indexer.searcher() as search:

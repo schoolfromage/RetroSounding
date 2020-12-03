@@ -115,6 +115,3 @@ h1 {
 .btn:focus-within::before {
 	left: 75px;
 }
-.gone {
-	display: none;
-}
