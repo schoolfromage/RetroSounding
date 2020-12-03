@@ -14,7 +14,7 @@ import re
 
 #Steven A
 starter = "https://en.wikipedia.org/w/api.php?action=parse&page="	#used for all queries
-URLstarter = "https://en.wikipedia.org/"	#used for the investigate_further and the URL
+URLstarter = "https://en.wikipedia.org/wiki/"	#used for the investigate_further and the URL
 
 def manageArgs():
 	if (len(argv)!=4):
@@ -32,10 +32,10 @@ def manageArgs():
 		
 def investigate_further(Target):
 	if (Target == None):
-		return "n/a","n/a","n/a","n/a"#return junk
+		return "n/a","n/a","[]","n/a"#return junk
 	#split the section name (#) from the target
 	Split = Target.split('#')
-	Name = Split[0]
+	Name = Split[0].replace('/wiki/',''	)
 	if (len(Split)>1):
 		SectionNumb = get_section_number(Name, Split[1])
 	else:
@@ -49,25 +49,27 @@ def investigate_further(Target):
 	Listfile = json.loads(req.text)
 	if "error" in Listfile:
 		print(Name+" is not on wikipedia")
-		return "n/a","n/a","n/a","n/a"
+		return "n/a","n/a","[]","n/a"
 	Text = Listfile["parse"]["text"]["*"]
 	store = lxml.html.fromstring(Text)
 	URL = URLstarter+Listfile["parse"]["title"].replace(' ','_')
-	TempList = store.xpath("//a[@class='image']/@href")
+	TempList = store.xpath("//table[contains(@class,'infobox')]//a[@class='image']/img/@src")
 	if len(TempList)>=1:
-		Picture =  URLstarter+TempList[0]
+		Picture =  TempList[0]
 	else:
 		Picture = "n/a"
 	Genres = store.xpath("//th/a[text()='Genre(s)']/../following::td[1]//text()")
 	Genres = [item for item in Genres if item != ' ']
+	if Genres==[]:
+		Genres = '[]'
 	Paragraphs = store.xpath("//h2/span[@id='Gameplay']/../following::p[position()<=2]")
 	if len(Paragraphs)==0:#if no "gameplay" section just default to front
 		Paragraphs = store.xpath("//div[@class='mw-parser-output']/p[position()<=2]")
 	if len(Paragraphs)==1:#if only one paragraph, just use that
 		Discription = Paragraphs[0].text_content().replace("\n", "")#no newlines!
 	else:#default behavior
-		Discription = Paragraphs[0].text_content().replace("\n", "")+" \\n "+Paragraphs[1].text_content().replace("\n", "")
-	
+		Discription = Paragraphs[0].text_content().replace("\n", "")+"<br \>"+Paragraphs[1].text_content().replace("\n", "")
+	Discription = re.sub(r'\[[^\[]*\]','',Discription)
 	return URL, Picture, Genres, Discription
 
 def get_section_number(Name, Section):
@@ -83,7 +85,7 @@ def get_section_number(Name, Section):
 	return None
 	
 def Scrape(file):
-	outputformat = "{id},\"{name}\",{release_year},[{developers}],[{publishers}],\"{img_url}\",\"{src_url}\",[{genres}],{console},\"{description}\"\n"	#the format string for the output file writes
+	outputformat = "{id},\"{name}\",{release_year},[{developers}],[{publishers}],\"{img_url}\",[{src_url}],{genres},[{console}],\"{description}\"\n"	#the format string for the output file writes
 	prompt = starter+mainPage+"&section="+sectionNumb+"&prop=text&format=json&redirects"
 	parser = etree.XMLParser(encoding='utf-8', recover=True)
 	req = requests.get(prompt)#the HTML request to wikipedia
