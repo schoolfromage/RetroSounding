@@ -38,7 +38,8 @@
       <input style="display: none;" type="text" value="{{ p - 1 }}" name="pp">
       <input style="display: none;" type="text" value="{{ query }}" name="searchterm">
 			<input id="pp" type="submit" value="{{ p - 1  }}" />
-		</form>
+    </form>
+    <p>{{ p }}</p>
     <form method="post" action="{{ url_for('results') }}">
       <input style="display: none;" type="text" value="{{ p + 1 }}" name="np">
       <input style="display: none;" type="text" value="{{ query }}" name="searchterm">
@@ -48,10 +49,18 @@
 			<input type="submit" value="Search Page" />
     </form>
     <script type="text/javascript">
+      const results = {{ data|tojson|safe }}
       document.addEventListener("DOMContentLoaded", () => {
-        if (document.querySelectorAll('tbody>tr').length < 20) { 'np'.style = "display:none" }
+        if (document.querySelectorAll('tbody>tr').length < 20) { np.style = "display:none" }
         if (pp.value == '0') { pp.style = "display:none" }
+        timeline();
       })
+      const timeline = () => {
+        sortedDates = results.map(a => a[1]).sort()
+        oldest = sortedDates[0]
+        recent = sortedDates[results.length-1]
+        unique = [...new Set(sortedDates)]
+      }
     </script>
 	</body>	
 </html>

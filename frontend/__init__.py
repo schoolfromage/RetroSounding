@@ -6,6 +6,7 @@ import whoosh
 from whoosh.fields import *
 from whoosh.qparser import MultifieldParser
 from random import randint #used for the random page button
+import json
 
 from whoosh.query import And, Or, Not, Term #used for the relevent result custom query
 import re #used for the query management
@@ -23,7 +24,7 @@ def results():
 		data = request.form
 	else:
 		data = request.args
-
+	
 	keywordquery = data.get('searchterm')
 	if not keywordquery:
 		gid = randint(0,5000)
@@ -58,7 +59,8 @@ def results():
 		page = int(npage)
 	print(page)
 	name, release_year, publishers, gids, images, page = mysearch.search(keywordquery, fields, page)
-	return render_template('results.html', p=page, query=keywordquery, results=zip(name, release_year, publishers, gids, images))
+	d=list(zip(name, release_year, publishers, gids, images))
+	return render_template('results.html', data=d, p=page, query=keywordquery, results=zip(name, release_year, publishers, gids, images))
 
 @app.route('/entry/', methods=['GET', 'POST'])
 def entry():
