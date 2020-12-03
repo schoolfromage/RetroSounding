@@ -29,8 +29,24 @@ def results():
 			name, release_year, developers, publishers, images, sources, genres, description, consoles = mysearch.retrieve(randint(0,5000))
 		return render_template('entry.html', gid=gid, name=name, release_year=release_year, developers=developers, publishers=publishers, images=images, sources=sources, genres=genres, description=description, consoles=consoles)
 	print('Keyword Query is: ' + keywordquery)
+	
+	fields = list()
+	if data.get('name'):
+		fields.append('name')
+	if data.get('release_year'):
+		fields.append('release_year')
+	if data.get('developers'):
+		fields.append('developers')
+	if data.get('publishers'):
+		fields.append('publishers')
+	if data.get('genres'):
+		fields.append('genres')
+	if data.get('description'):
+		fields.append('description')
+	if data.get('consoles'):
+		fields.append('consoles')
 
-	name, release_year, publishers, gids = mysearch.search(keywordquery)
+	name, release_year, publishers, gids = mysearch.search(keywordquery, fields)
 	return render_template('results.html', query=keywordquery, results=zip(name, release_year, publishers, gids))
 
 @app.route('/entry/', methods=['GET', 'POST'])
@@ -59,7 +75,9 @@ class MyWhooshSearch(object):
 	def __init__(self):
 		super(MyWhooshSearch, self).__init__()
 
-	def search(self, queryEntered):
+	def search(self, queryEntered, fields):
+		if not fields:
+			fields = ['name', 'release_year', 'developers', 'publishers', 'genres', 'description', 'consoles']
 		name = list()
 		release_year = list()
 		developers = list()
@@ -70,7 +88,6 @@ class MyWhooshSearch(object):
 		description = list()
 		gids = list()
 		consoles = list()
-		searchFields = ['name', 'release_year', 'developers', 'publishers', 'genres', 'description', 'consoles']
 		# start of if related
 
 		if(queryEntered.split(':')[0] == "related"):
@@ -78,7 +95,7 @@ class MyWhooshSearch(object):
 			# from here you can add the actual search and change the "queryEntered" value before it actually goes into the search stuff below
 			
 		with self.indexer.searcher() as search:
-			parser = MultifieldParser(searchFields, schema=self.indexer.schema)
+			parser = MultifieldParser(fields, schema=self.indexer.schema)
 			query = parser.parse(queryEntered)
 			results = search.search(query, limit=None)
 
