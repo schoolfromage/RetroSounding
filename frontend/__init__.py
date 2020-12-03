@@ -95,7 +95,7 @@ class MyWhooshSearch(object):
 		query = None#temp value - this value is alwayse changed before the search
 		relatedMatch =re.match(r'(.*)related:(\w*)(.*)',queryEntered)#0=whole match, 1=before, 2=data, 3=after for match.group(#)
 		if(relatedMatch):
-			parser = MultifieldParser(searchFields, schema=self.indexer.schema)#this is used for both related queries and reqular ones
+			parser = MultifieldParser(fields, schema=self.indexer.schema)#this is used for both related queries and reqular ones
 			with self.indexer.searcher() as search:
 				relatedDoc = search.document(GID = relatedMatch.group(2))#looks for the gid of the thing after the collon
 				print(relatedDoc['name'])
