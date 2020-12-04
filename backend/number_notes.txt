@@ -1,0 +1,7 @@
+NES 	0
+MAC	1
+N64 	2
+GB	3,4
+Arcade	5,6
+Apple2	7
+SNES	8
