@@ -17,8 +17,8 @@ const timeline = () => {
 	canvasDrawer.fileStyle='#fff';
 	canvasDrawer.lineWidth=2;
 	
-	var w = myCanvas.width;
-	var h = myCanvas.height;
+	var w = myCanvas.width; // I'd suggest using myCanvas.clientHeight and clientWidth
+	var h = myCanvas.height; // it gives you the real height and width of the object as seen in devtools when hovering over it
 	var range = youngest-oldest+2;//add 2 years for the top and bottom bracket
 	var spacing = (h-40)/range;
 	
