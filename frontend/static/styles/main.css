@@ -176,15 +176,15 @@ h1 {
   padding: 10px;
 }
 .result {
-
+  width: 100%;
+  margin-bottom: 20px;
 }
 .result td {
   background-color: black;
-  margin-right: 10px;
 }
 .result .thumb {
-  width: 100px;
-  height: 100px;
+  width: 150px;
+  height: 150px;
   display: inline-block;
 }
 .thumb img {
@@ -198,6 +198,7 @@ aside {
   overflow: hidden;
   min-width: 250px;
   box-sizing: border-box;
+  width: 20%;
 }
 canvas {
   width: 100%;

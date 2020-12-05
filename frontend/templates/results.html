@@ -17,33 +17,24 @@
   </header>
   <div id="main">
     <div id="resultsWrapper">
-      <table class="results">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Release Year</th>
-            <th>Publishers</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for n, r, p, gid, img in results %}
-          <tr class="result">
-            <td><div class="thumb"><img src="{{ img }}"/></div></td>
-            <td class="sec name">{{n}}</td>
-            <td class="sec year">{{r}}</td>
-            <td class="sec publ">{{p}}</td>
-            <td class="sec moreinfo">
-              <form method="post" action="{{ url_for('entry') }}">
-                <input style="display:none" type="text" name="gid" value="{{ gid }}">
-                <input type="submit" value="Info"/>
-              </form>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+        {% for n, r, p, gid, img in results %}
+        <div class="result">
+          <div class="sec name">Name: {{n}}</div>
+          <div class="sec year">Release Year: {{r}}</div>
+          <div class="sec publ">Publishers: {{p}}</div>
+          <div class="sec moreinfo">
+            <form method="post" action="{{ url_for('entry') }}">
+              <input style="display:none" type="text" name="gid" value="{{ gid }}">
+              <button type="button" gid="{{ gid }}" id="share" onclick="Share(this)">Share</button>
+              <input type="submit" value="Info"/>
+            </form>
+          </div>
+          <div class="thumb"><img src="{{ img }}" id="{{ gid }}"/></div>
+        </div>
+        {% endfor %}
+      </div>
+      <aside><canvas id="timeLine"></canvas></aside>
     </div>
-    <aside><canvas id="timeLine"></canvas></aside>
   </div>
     <div class="pages">
       <form method="post" action="{{ url_for('results') }}">
@@ -61,6 +52,7 @@
     <!-- Use this script tage to store data you wanna pass using jinja -->
     <script type="text/javascript">
       const results = {{ data|tojson|safe }}
+      ;const Share = (el) => { navigator.clipboard.writeText(`${window.location.host}/entry/?gid=${el.getAttribute("gid")}`) }
     </script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/app.js') }}"></script>
 	</body>	
