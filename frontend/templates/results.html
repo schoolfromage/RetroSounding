@@ -37,6 +37,7 @@
               </form>
             </div>
           </div>
+		  <!--the timeline will grab this element b/c of the id=gid attribute-->
           <a href="{{ url_for('entry') }}?gid={{ gid }}" class="thumb" id="{{ gid }}"><img src="{{ img }}"/></a>
         </div>
         {% endfor %}
