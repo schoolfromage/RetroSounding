@@ -7,56 +7,60 @@
 		<link rel="stylesheet" href=" {{ url_for('static', filename='styles/main.css')}} ">
 		<title>Search results for {{ query }}</title>
 	</head>
-
 	<body>
-		<form method="get" action="{{ url_for('results') }}">
+    <header><form method="get" action="{{ url_for('results') }}">
 			<label>
-				<input type="text" name="searchterm" value ="{{ query }}" checked/>
+				<input type="text" name="searchterm" value ="{{ query }}"/>
 				<input type="submit" value="Search now"/>
 			</label>
-		</form>
-		<table>
-			<thead>
-				<tr>
-					<th>Name</th>
-					<th>Release Year</th>
-					<th>Publishers</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for n, r, p, gid, img in results %}
-				<tr>
-					<td><div class="thumb"><img src="{{ img }}"/></div>>{{n}}</td>
-					<td>{{r}}</td>
-					<td>{{p}}</td>
-					<td>
-						<form method="post" action="{{ url_for('entry') }}">
-							<input style="display:none" type="text" name="gid" value="{{ gid }}">
-							<input type="submit" value="Info"/>
-						</form>
-					</td>
-				</tr>
-				{% endfor %}
-			</tbody>
-    </table>
+    </form>
+  </header>
+  <div id="main">
+    <div id="resultsWrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Release Year</th>
+            <th>Publishers</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for n, r, p, gid, img in results %}
+          <tr>
+            <td><div class="thumb"><img src="{{ img }}"/></div>{{n}}</td>
+            <td>{{r}}</td>
+            <td>{{p}}</td>
+            <td>
+              <form method="post" action="{{ url_for('entry') }}">
+                <input style="display:none" type="text" name="gid" value="{{ gid }}">
+                <input type="submit" value="Info"/>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
     <aside><canvas id="timeLine"></canvas></aside>
-		<form method="post" action="{{ url_for('results') }}">
-      <input style="display: none;" type="text" value="{{ p - 1 }}" name="pp">
-      <input style="display: none;" type="text" value="{{ query }}" name="searchterm">
-			<input id="pp" type="submit" value="{{ p - 1  }}" />
+  </div>
+    <div class="pages">
+      <form method="post" action="{{ url_for('results') }}">
+        <input style="display: none;" type="text" value="{{ p - 1 }}" name="pp">
+        <input style="display: none;" type="text" value="{{ query }}" name="searchterm">
+        <input id="pp" type="submit" value="{{ p - 1  }}" />
+      </form>
+      <p>{{ p }}</p>
+      <form method="post" action="{{ url_for('results') }}">
+        <input style="display: none;" type="text" value="{{ p + 1 }}" name="np">
+        <input style="display: none;" type="text" value="{{ query }}" name="searchterm">
+      <input id="np" type="submit" value="{{ p + 1 }}" />
     </form>
-    <p>{{ p }}</p>
-    <form method="post" action="{{ url_for('results') }}">
-      <input style="display: none;" type="text" value="{{ p + 1 }}" name="np">
-      <input style="display: none;" type="text" value="{{ query }}" name="searchterm">
-		<input id="np" type="submit" value="{{ p + 1 }}" />
-	</form>
-	<form method="post" action="{{ url_for('index') }}">
-		<input type="submit" value="Search Page" />
-    </form>
+    </div>
     <!-- Use this script tage to store data you wanna pass using jinja -->
     <script type="text/javascript">
       const results = {{ data|tojson|safe }}
+      const r = /(http(s?):)|([/|.|\w|\s])*\.(?:jpg|gif|png)/i;
     </script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/app.js') }}"></script>
 	</body>	
