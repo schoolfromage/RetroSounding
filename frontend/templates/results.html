@@ -19,10 +19,12 @@
     <div id="resultsWrapper">
         {% for n, r, p, gid, img in results %}
         <div class="result">
-          <div class="sec name">Name: {{n}}</div>
-          <div class="sec year">Release Year: {{r}}</div>
-          <div class="sec publ">Publishers: {{p}}</div>
-          <div class="sec moreinfo">
+          <div class="details">
+            <div class="name">Name: {{n}}</div>
+            <div class="year">Release Year: {{r}}</div>
+            <div class="publ">Publishers: {{p}}</div>
+          </div>
+          <div class="buttons">
             <form method="post" action="{{ url_for('entry') }}">
               <input style="display:none" type="text" name="gid" value="{{ gid }}">
               <button type="button" gid="{{ gid }}" id="share" onclick="Share(this)">Share</button>
