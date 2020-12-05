@@ -38,7 +38,8 @@
 				</tr>
 				{% endfor %}
 			</tbody>
-		</table>
+    </table>
+    <aside id="timeLine"></aside>
 		<form method="post" action="{{ url_for('results') }}">
       <input style="display: none;" type="text" value="{{ p - 1 }}" name="pp">
       <input style="display: none;" type="text" value="{{ query }}" name="searchterm">
