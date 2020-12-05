@@ -60,7 +60,6 @@
     <!-- Use this script tage to store data you wanna pass using jinja -->
     <script type="text/javascript">
       const results = {{ data|tojson|safe }}
-      const r = /(http(s?):)|([/|.|\w|\s])*\.(?:jpg|gif|png)/i;
     </script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/app.js') }}"></script>
 	</body>	
