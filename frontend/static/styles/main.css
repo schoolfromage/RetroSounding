@@ -164,14 +164,34 @@ h1 {
   display: flex;
   flex-flow: row wrap;
   width: 100%;
+  max-width: 2500px;
   overflow: hidden;
   box-sizing: border-box;
-  justify-content: center;
+  justify-content: space-evenly;
+  margin: 0 auto;
 }
 #resultsWrapper {
-  background-color: #111;
   min-width: 800px;
   box-sizing: border-box;
+  padding: 10px;
+}
+.result {
+
+}
+.result td {
+  background-color: black;
+  margin-right: 10px;
+}
+.result .thumb {
+  width: 100px;
+  height: 100px;
+  display: inline-block;
+}
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background-color:rgba(0,0,0,0.1);
 }
 aside {
   background-color: blue;
@@ -182,4 +202,6 @@ aside {
 canvas {
   width: 100%;
   height: 100%;
+}
+.pages {
 }

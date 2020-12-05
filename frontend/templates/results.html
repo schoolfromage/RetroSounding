@@ -17,7 +17,7 @@
   </header>
   <div id="main">
     <div id="resultsWrapper">
-      <table>
+      <table class="results">
         <thead>
           <tr>
             <th>Name</th>
@@ -27,11 +27,12 @@
         </thead>
         <tbody>
           {% for n, r, p, gid, img in results %}
-          <tr>
-            <td><div class="thumb"><img src="{{ img }}"/></div>{{n}}</td>
-            <td>{{r}}</td>
-            <td>{{p}}</td>
-            <td>
+          <tr class="result">
+            <td><div class="thumb"><img src="{{ img }}"/></div></td>
+            <td class="sec name">{{n}}</td>
+            <td class="sec year">{{r}}</td>
+            <td class="sec publ">{{p}}</td>
+            <td class="sec moreinfo">
               <form method="post" action="{{ url_for('entry') }}">
                 <input style="display:none" type="text" name="gid" value="{{ gid }}">
                 <input type="submit" value="Info"/>
