@@ -250,16 +250,20 @@ h1 {
   background-color:rgba(0,0,0,0.1);
 }
 aside {
-  background-color: blue;
+  border: 2px solid blue;
   overflow: hidden;
   min-width: 250px;
   box-sizing: border-box;
-  width: 20%;
+  width: 25%;
+  position:relative;
 }
 canvas {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: absolute;
+}
+aside>img{
+  position: absolute; /*position needs to be not static for z-index to work*/
 }
 .pages {
 }

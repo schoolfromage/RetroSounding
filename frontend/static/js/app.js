@@ -10,24 +10,33 @@ const timeline = () => {
 	unique = [...new Set(sortedDates)]
 
 	const myCanvas=document.getElementById('timeLine');
+	var w = myCanvas.clientWidth;
+	myCanvas.width = w;
+	var h = myCanvas.clientHeight;
+	myCanvas.height = h;
 	const canvasDrawer = myCanvas.getContext('2d');
 	canvasDrawer.lineCap='round'
-	canvasDrawer.font = '40px Ariel'
-	canvasDrawer.strokeStyle='#fff';
-	canvasDrawer.fileStyle='#fff';
+	canvasDrawer.font = '30px Ariel'
+	canvasDrawer.strokeStyle='#eee';
+	canvasDrawer.fileStyle='#eee';
 	canvasDrawer.lineWidth=2;
 	
-	var w = myCanvas.width; // I'd suggest using myCanvas.clientHeight and clientWidth
-	var h = myCanvas.height; // it gives you the real height and width of the object as seen in devtools when hovering over it
+	
 	var range = youngest-oldest+2;//add 2 years for the top and bottom bracket
-	var spacing = (h-40)/range;
+	if (range<10){//if the range is uncomfertably small then make it bigger
+		oldest -= 4;
+		youngest += 4;
+		range+=8;
+	}
+	var spacing = (h-40)/range;//the spacing between years on the timeline
+	var filled = []; //an array containing the # of objects at place [index]
 	
 	drawBase(oldest,youngest)
 	results.forEach(drawGames)
 	
 	function drawBase(min, max) {
 		var gap = 1;//the distance between years marked
-		while ((range/gap) > 10){//<- put the max number of ticks here
+		while ((range/gap) > 20){//<- put the max number of ticks here
 		gap++;
 		}
 		//draw the big tabs and center tab
@@ -58,13 +67,23 @@ const timeline = () => {
 	//0-name 1-date 2-pub 3-GID 4-console 5-image
 	function drawGames(item, index){
 		console.log(item)
-		// var place =Number(item[1])-oldest;
-		// picture = new Image()
-		// if (item.length==6){
-			// picture.src = item[5]
-		// }else{
-			// picture.src = '.\frontend\static\images\missing_image.jpg'
-		// }
-		// canvasDrawer.drawImage(picture,5,spacing*place+10, 50,50)
+		var place =Number(item[1])-(oldest-1);//2 is added for the top & bottom spacing
+		
+		if (filled[place]==undefined){
+			filled[place]=1
+		}else{
+			filled[place]+=1
+		}
+		
+		var veriticalPlace = filled[place]
+		console.log(veriticalPlace);
+		picture = document.getElementById(item[3]);
+		clone = picture.cloneNode(false);
+		clone.style.maxHeight = (h/21).toString()+"px";
+		clone.style.maxWidth = (w/6).toString()+"px";
+		clone.style.top = (place*spacing+(veriticalPlace%2*10)-5).toString()+"px";
+		clone.style.left = (w/2-(veriticalPlace*50)).toString()+"px";
+		clone.style.zIndex = item[3].toString(); //setting the z index to the gid //doesnt actually matter as long as unique > 0 value
+		myCanvas.parentElement.insertBefore(clone,myCanvas);
 	}
 }
