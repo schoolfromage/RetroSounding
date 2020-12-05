@@ -262,7 +262,7 @@ canvas {
   height: 100%;
   object-fit: absolute;
 }
-aside>img{
+aside>a{
   position: absolute; /*position needs to be not static for z-index to work*/
 }
 .pages {

@@ -78,7 +78,7 @@ const timeline = () => {
 		var veriticalPlace = filled[place]
 		console.log(veriticalPlace);
 		picture = document.getElementById(item[3]);
-		clone = picture.cloneNode(false);
+		clone = picture.cloneNode(true);
 		clone.style.maxHeight = (h/21).toString()+"px";
 		clone.style.maxWidth = (w/6).toString()+"px";
 		clone.style.top = (place*spacing+(veriticalPlace%2*10)-5).toString()+"px";
