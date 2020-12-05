@@ -52,6 +52,7 @@ h1 {
 	padding: 1rem 0.75rem;
 	background-color: #eee;
 	border: solid 2px #2C2C2C;
+  transition: all linear .1s;
 }
 .searchBar input {
 	width: 100%;
@@ -71,7 +72,8 @@ h1 {
 	background: #2C2C2C;
 }
 .searchBar:hover,
-.searchBar:focus {
+.searchBar:focus,
+.searchBar:focus-within {
 	border: solid 2px red;
 }
 #searchBar .btn {
@@ -79,14 +81,15 @@ h1 {
 	overflow: hidden;
 	color: #eee;
 	position: relative;
-	background-color: #333;
+	background-color: rgba(0,0,0,0.1);
 	border: solid 2px #2C2C2C;
 	width: 300px;
 	margin: 0 auto;
 	margin-top: 20px;
 }
 #searchBar .btn:focus-within,
-#searchBar .btn:hover {
+#searchBar .btn:hover,
+#searchBar .btn:focus {
 	border: solid 2px red;
 }
 .btn input {
@@ -98,7 +101,8 @@ h1 {
 	height: 100%;
 	background-color: inherit;
 	text-align: left;
-	text-indent: 80px;
+  text-indent: 80px;
+  cursor: pointer;
 }
 .btn::before {
 	content: '>';
@@ -114,4 +118,148 @@ h1 {
 .btn:hover::before,
 .btn:focus-within::before {
 	left: 75px;
+}
+.checks {
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  margin-top: 20px;
+}
+.chk {
+  font-family: 'SuperLegendBoy', 'Courier New', Courier, monospace;
+  font-size: 0.8rem;
+  box-sizing: border-box;
+  margin: 0px 10px 10px 0px;
+  padding: 0.5rem 0.75rem;
+  background-color: rgba(0,0,0,0.3);
+  border: solid 2px #2C2C2C;
+  position: relative;
+  transition: all linear .1s;
+  cursor: pointer;
+}
+.chk:focus,
+.chk:hover,
+.chk:focus-within {
+  border: solid 2px red;
+}
+.chk::selection {
+  background: transparent;
+  color: #eee;
+}
+.chk span {
+  display: inline-block;
+  background-color: #eee;
+  width: 10px;
+  height: 10px;
+  margin-left: 0.75rem;
+  z-index: 1;
+  transition: all linear 0.1s;
+  cursor: pointer;
+}
+.chk input {
+  opacity: 0;
+  position: absolute;
+  cursor: pointer;
+}
+.chk input:checked + span {
+  background-color: red;
+}
+#main {
+  display: flex;
+  flex-flow: row wrap;
+  width: 100%;
+  max-width: 2500px;
+  overflow: hidden;
+  box-sizing: border-box;
+  justify-content: space-evenly;
+  margin: 0 auto;
+}
+#resultsWrapper {
+  min-width: 100px;
+  box-sizing: border-box;
+  padding: 10px;
+  width: 70%;
+}
+.result {
+  box-sizing: border-box;
+  width: 100%;
+  margin-bottom: 20px;
+  background-color: rgba(0,0,0,0.1);
+  padding: 20px;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  font-family: 'Consolas', 'Courier New', Courier, monospace;
+  border: solid 2px #2C2C2C;
+  transition: border linear .2s;
+}
+.result:hover,
+.result:focus,
+.result:focus-within {
+  border: solid 2px red;
+}
+.result .name {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+.result .year {
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+}
+.result .publ {
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+}
+.result .thumb {
+  width: 150px;
+  height: 150px;
+  display: inline-block;
+  position: relative;
+}
+.result button.butt,
+.result .butt input {
+  outline: none;
+  border: solid 2px transparent;
+  transition: all linear .2s;
+	font-family: 'SuperLegendBoy', 'Courier New', Courier, monospace;
+  font-size: 0.7rem;
+  padding: 0.5rem 0.75rem;
+  background-color: rgba(0,0,0,0.3);
+  color: #eee;
+  cursor:pointer;
+}
+.result button.butt:hover,
+.result button.butt:focus,
+.result button.butt:focus-within,
+.result .butt input:hover,
+.result .butt input:focus,
+.result .butt input:focus-within {
+  border: solid 2px red;
+}
+.result button.butt:active,
+.result .butt input:active {
+  filter: invert(1)
+}
+.result form {
+  display: inline-block;
+}
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background-color:rgba(0,0,0,0.1);
+}
+aside {
+  background-color: blue;
+  overflow: hidden;
+  min-width: 250px;
+  box-sizing: border-box;
+  width: 20%;
+}
+canvas {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.pages {
 }

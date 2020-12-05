@@ -8,10 +8,21 @@
 		<title>{{ name }}</title>
 	</head>
 	<body>
-		<h1>{{ name }}</h1>
-		<p>{{ description }}</p>
+	
 		<form method="get" action="{{ url_for('results') }}">
-			<label style="display:none"><input type="text" name="searchterm" value="related:{{ gid }}"/></label>
+			<label>
+				<input type="text" name="searchterm" value ="{{ query }}" checked/>
+				<input type="submit" value="Search now"/>
+			</label>
+		</form>
+		<h1>{{ name }}</h1>
+		<div class="thumb"><img src="{{ images }}"/></div>>
+		<p>developers : {{ developers }} | publishers : {{ publishers }}
+		<p>{{ description }}</p>
+		<p>available for:<br />{{consoles}}</p>
+		<p>Genres: {{ genres }} </p>
+		<form method="get" action="{{ url_for('results') }}">
+			<label style="display:none"><input type="text" value="related:{{ gid }}" name="searchterm"/></label>
 			<label><input type="submit" value="Related Games"/></label>
 		</form>
 		<form method="post" action="{{ url_for('index') }}">

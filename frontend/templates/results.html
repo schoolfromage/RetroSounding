@@ -7,60 +7,61 @@
 		<link rel="stylesheet" href=" {{ url_for('static', filename='styles/main.css')}} ">
 		<title>Search results for {{ query }}</title>
 	</head>
-
 	<body>
-		<h2> You searched for: {{ query }}</h2>
-		<table>
-			<thead>
-				<tr>
-					<th>Name</th>
-					<th>Release Year</th>
-					<th>Publishers</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for n, r, p, gid, img in results %}
-				<tr>
-					<td><div class="thumb"><img src="{{ img }}"/></div>>{{n}}</td>
-					<td>{{r}}</td>
-					<td>{{p}}</td>
-					<td>
-						<form method="post" action="{{ url_for('entry') }}">
-							<input style="display:none" type="text" name="gid" value="{{ gid }}">
-							<input type="submit" value="Info"/>
-						</form>
-					</td>
-				</tr>
-				{% endfor %}
-			</tbody>
-		</table>
-		<form method="post" action="{{ url_for('results') }}">
-      <input style="display: none;" type="text" value="{{ p - 1 }}" name="pp">
-      <input style="display: none;" type="text" value="{{ query }}" name="searchterm">
-			<input id="pp" type="submit" value="{{ p - 1  }}" />
+    <header><form method="get" action="{{ url_for('results') }}">
+			<label>
+				<input type="text" name="searchterm" value ="{{ query }}"/>
+				<input type="submit" value="Search now"/>
+			</label>
     </form>
-    <p>{{ p }}</p>
-    <form method="post" action="{{ url_for('results') }}">
-      <input style="display: none;" type="text" value="{{ p + 1 }}" name="np">
-      <input style="display: none;" type="text" value="{{ query }}" name="searchterm">
-			<input id="np" type="submit" value="{{ p + 1 }}" />
-		</form>
-		<form method="post" action="{{ url_for('index') }}">
-			<input type="submit" value="Search Page" />
+  </header>
+  <div id="main">
+    <div id="resultsWrapper">
+        {% for n, r, p, gid, img in results %}
+        <div class="result">
+          <div class="info">
+            <div class="details">
+              <div class="name">{{n}}</div>
+              <div class="year">Released in {{r}}</div>
+              <div class="publ">Published by {{p}}</div>
+            </div>
+            <div class="buttons">
+              <form method="post" action="{{ url_for('entry') }}">
+                <input style="display:none" type="text" name="gid" value="{{ gid }}">
+                <button class="butt" type="button" gid="{{ gid }}" id="share" onclick="Share(this)">Share</button>
+                <label class="butt" ><input type="submit" value="Info"/></label>
+              </form>
+              <form method="get" action="{{ url_for('results') }}">
+                <label style="display:none"><input type="text" value="related:{{ gid }}" name="searchterm"/></label>
+                <label class="butt" ><input type="submit" value="Related Games"/></label>
+              </form>
+            </div>
+          </div>
+          <div class="thumb"><img src="{{ img }}" id="{{ gid }}"/></div>
+        </div>
+        {% endfor %}
+      </div>
+      <aside><canvas id="timeLine"></canvas></aside>
+    </div>
+  </div>
+    <div class="pages">
+      <form method="post" action="{{ url_for('results') }}">
+        <input style="display: none;" type="text" value="{{ p - 1 }}" name="pp">
+        <input style="display: none;" type="text" value="{{ query }}" name="searchterm">
+        <input id="pp" type="submit" value="{{ p - 1  }}" />
+      </form>
+      <p>{{ p }}</p>
+      <form method="post" action="{{ url_for('results') }}">
+        <input style="display: none;" type="text" value="{{ p + 1 }}" name="np">
+        <input style="display: none;" type="text" value="{{ query }}" name="searchterm">
+      <input id="np" type="submit" value="{{ p + 1 }}" />
     </form>
+    </div>
+    <!-- Use this script tage to store data you wanna pass using jinja -->
     <script type="text/javascript">
       const results = {{ data|tojson|safe }}
-      document.addEventListener("DOMContentLoaded", () => {
-        if (document.querySelectorAll('tbody>tr').length < 20) { np.style = "display:none" }
-        if (pp.value == '0') { pp.style = "display:none" }
-        timeline();
-      })
-      const timeline = () => {
-        sortedDates = results.map(a => a[1]).sort()
-        oldest = sortedDates[0]
-        recent = sortedDates[results.length-1]
-        unique = [...new Set(sortedDates)]
-      }
+      ;const Share = (el) => { navigator.clipboard.writeText(`${window.location.host}/entry/?gid=${el.getAttribute("gid")}`) }
     </script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/app.js') }}"></script>
 	</body>	
 </html>
