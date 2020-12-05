@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-	if (document.querySelectorAll('tbody>tr').length < 20) { np.style = "display:none" }
+	if (document.querySelectorAll('.result').length < 20) { np.style = "display:none" }
 	if (pp.value == '0') { pp.style = "display:none" }
 	timeline();
 })

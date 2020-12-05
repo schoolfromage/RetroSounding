@@ -19,17 +19,23 @@
     <div id="resultsWrapper">
         {% for n, r, p, gid, img in results %}
         <div class="result">
-          <div class="details">
-            <div class="name">Name: {{n}}</div>
-            <div class="year">Release Year: {{r}}</div>
-            <div class="publ">Publishers: {{p}}</div>
-          </div>
-          <div class="buttons">
-            <form method="post" action="{{ url_for('entry') }}">
-              <input style="display:none" type="text" name="gid" value="{{ gid }}">
-              <button type="button" gid="{{ gid }}" id="share" onclick="Share(this)">Share</button>
-              <input type="submit" value="Info"/>
-            </form>
+          <div class="info">
+            <div class="details">
+              <div class="name">{{n}}</div>
+              <div class="year">Released in {{r}}</div>
+              <div class="publ">Published by {{p}}</div>
+            </div>
+            <div class="buttons">
+              <form method="post" action="{{ url_for('entry') }}">
+                <input style="display:none" type="text" name="gid" value="{{ gid }}">
+                <button class="butt" type="button" gid="{{ gid }}" id="share" onclick="Share(this)">Share</button>
+                <label class="butt" ><input type="submit" value="Info"/></label>
+              </form>
+              <form method="get" action="{{ url_for('results') }}">
+                <label style="display:none"><input type="text" value="related:{{ gid }}" name="searchterm"/></label>
+                <label class="butt" ><input type="submit" value="Related Games"/></label>
+              </form>
+            </div>
           </div>
           <div class="thumb"><img src="{{ img }}" id="{{ gid }}"/></div>
         </div>
