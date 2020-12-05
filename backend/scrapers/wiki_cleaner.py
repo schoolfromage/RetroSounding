@@ -19,9 +19,9 @@ outputLines.append(List[0])
 for line in List[1:]:
 	match = re.match(r'([^,]*),"(.*)",([^,]*),\[(.*)\],\[(.*)\],"(.*)",\[(.*)\],\[(.*)\],\[(.*)\],"(.*)"',line)
 	if match:
-		desc = match.group(10).replace('\\n','<br />')
-		desc = re.sub(r'\[[^\]]\]','',desc)
-		outputLines.append(match.group(1)+','+'"'+match.group(2)+'"'+','+match.group(3)+','+'['+match.group(4)+']'+','+'['+match.group(5)+']'+','+'"'+match.group(6)+'"'+','+'['+match.group(7)+']'+','+'['+match.group(8)+']'+','+'['+match.group(9)+']'+','+'"'+desc+'"'+'\n')
+		year = match.group(3)
+		if year != 'n/a':
+			outputLines.append(match.group(1)+','+'"'+match.group(2)+'"'+','+match.group(3)+','+'['+match.group(4)+']'+','+'['+match.group(5)+']'+','+'"'+match.group(6)+'"'+','+'['+match.group(7)+']'+','+'['+match.group(8)+']'+','+'['+match.group(9)+']'+','+'"'+match.group(10)+'"'+'\n')
 	else:
 		print("Error in match\n",line)
 		break;
