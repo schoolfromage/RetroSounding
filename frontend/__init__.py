@@ -58,8 +58,8 @@ def results():
 	if npage:
 		page = int(npage)
 	print(page)
-	name, release_year, publishers, gids, images, page = mysearch.search(keywordquery, fields, page)
-	d=list(zip(name, release_year, publishers, gids, images))
+	name, release_year, publishers, gids, consoles, images, page = mysearch.search(keywordquery, fields, page)
+	d=list(zip(name, release_year, publishers, gids, consoles, images))
 	return render_template('results.html', data=d, p=page, query=keywordquery, results=zip(name, release_year, publishers, gids, images))
 
 @app.route('/entry/', methods=['GET', 'POST'])
@@ -109,8 +109,8 @@ class MyWhooshSearch(object):
 		if relatedMatch:
 			with self.indexer.searcher() as search:
 				relatedDoc = search.document(GID = relatedMatch.group(2))#looks for the gid of the thing after the collon
-				print(relatedDoc['name'])
 				if relatedDoc: #document will return None if the gid is invalid
+					print(relatedDoc['name'])
 					relatedTerms = Or([
 						Term('consoles',relatedDoc['consoles'].lower(),boost=0.7),
 						Term('genres',relatedDoc['genres'].lower(), boost=1.3),
@@ -136,7 +136,7 @@ class MyWhooshSearch(object):
 				consoles.append(x['consoles'])
 				gids.append(x['GID'])
 
-		return name, release_year, publishers, gids, images, page
+		return name, release_year, publishers, gids, consoles, images, page
 
 	def retrieve(self, gid):
 		with self.indexer.searcher() as search:

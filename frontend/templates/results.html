@@ -9,7 +9,12 @@
 	</head>
 
 	<body>
-		<h2> You searched for: {{ query }}</h2>
+		<form method="get" action="{{ url_for('results') }}">
+			<label>
+				<input type="text" name="searchterm" value ="{{ query }}" checked/>
+				<input type="submit" value="Search now"/>
+			</label>
+		</form>
 		<table>
 			<thead>
 				<tr>
@@ -43,10 +48,10 @@
     <form method="post" action="{{ url_for('results') }}">
       <input style="display: none;" type="text" value="{{ p + 1 }}" name="np">
       <input style="display: none;" type="text" value="{{ query }}" name="searchterm">
-			<input id="np" type="submit" value="{{ p + 1 }}" />
-		</form>
-		<form method="post" action="{{ url_for('index') }}">
-			<input type="submit" value="Search Page" />
+		<input id="np" type="submit" value="{{ p + 1 }}" />
+	</form>
+	<form method="post" action="{{ url_for('index') }}">
+		<input type="submit" value="Search Page" />
     </form>
     <script type="text/javascript">
       const results = {{ data|tojson|safe }}
