@@ -52,6 +52,7 @@ h1 {
 	padding: 1rem 0.75rem;
 	background-color: #eee;
 	border: solid 2px #2C2C2C;
+  transition: all linear .1s;
 }
 .searchBar input {
 	width: 100%;
@@ -71,7 +72,8 @@ h1 {
 	background: #2C2C2C;
 }
 .searchBar:hover,
-.searchBar:focus {
+.searchBar:focus,
+.searchBar:focus-within {
 	border: solid 2px red;
 }
 #searchBar .btn {
@@ -79,14 +81,15 @@ h1 {
 	overflow: hidden;
 	color: #eee;
 	position: relative;
-	background-color: #333;
+	background-color: rgba(0,0,0,0.1);
 	border: solid 2px #2C2C2C;
 	width: 300px;
 	margin: 0 auto;
 	margin-top: 20px;
 }
 #searchBar .btn:focus-within,
-#searchBar .btn:hover {
+#searchBar .btn:hover,
+#searchBar .btn:focus {
 	border: solid 2px red;
 }
 .btn input {
@@ -115,3 +118,45 @@ h1 {
 .btn:focus-within::before {
 	left: 75px;
 }
+.checks {
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  margin-top: 20px;
+}
+.chk {
+  font-family: 'SuperLegendBoy', 'Courier New', Courier, monospace;
+  font-size: 0.8rem;
+  box-sizing: border-box;
+  margin: 0px 10px 10px 0px;
+  padding: 0.5rem 0.75rem;
+  background-color: rgba(0,0,0,0.3);
+  border: solid 2px #2C2C2C;
+  position: relative;
+  transition: all linear .1s;
+}
+.chk:focus,
+.chk:hover,
+.chk:focus-within {
+  border: solid 2px red;
+}
+.chk::selection {
+  background: transparent;
+  color: #eee;
+}
+.chk span {
+  display: inline-block;
+  background-color: #eee;
+  width: 10px;
+  height: 10px;
+  margin-left: 0.75rem;
+  z-index: 1;
+  transition: all linear 0.1s;
+}
+.chk input {
+  opacity: 0;
+  position: absolute;
+}
+.chk input:checked + span {
+  background-color: red;
+} 
