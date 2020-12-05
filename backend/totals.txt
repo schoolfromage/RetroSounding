@@ -1,0 +1,9 @@
+apple2 - 386
+arcade - 1435
+GB - 1057
+macintosh - 434
+N64 - 394
+Nintendo - 713
+snes - 1758
+
+total - 6177

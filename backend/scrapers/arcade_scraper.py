@@ -14,6 +14,7 @@ import wikipedia
 import time
 import csv 
 import json
+import re
 
 start_time = time.time()
 
@@ -32,6 +33,10 @@ alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N'
 pages_to_visit = []
 for letter in alphabet:
 	pages_to_visit.append(HUBpage + letter)
+
+references = []
+for i in range(1, 100):
+	references.append('[' + str(i) + ']')
 
 def getAllRows(url):
 	rows = []
@@ -102,22 +107,34 @@ def extractData(rows):
 			publisher = 'n/a'
 			publisherRead -= 1
 
-		# genres
-		genres = (cells[4].get_text()).replace('\n', '')
-		genresRead += 1
-		if (len(genres) == 0):
-			genres = 'n/a'
-			genresRead -= 1
-
 		# src
 		href = row.find('td').find('i').find('a')['href']
 		link = URLstarter + href
 		src = ('[' + link + ']').replace('\n', '')
+		if( re.search('redlink', src) != None):
+			src = 'n/a'
 		src_urlRead += 1
 
 		# img & desc
 		img = getImage(href, name, link)
 		description = getDesc(href[6:]) 
+		genres = getGenre(link)
+
+		for ref in references:
+			if (re.search(ref, name) != None):
+				name = name.replace(ref, '')
+			if (re.search(ref, publisher) != None):
+				publisher = publisher.replace(ref, '')
+			if (re.search(ref, developer) != None):
+				developer = developer.replace(ref, '')
+			if (re.search(ref, genres) != None):
+				genres = genres.replace(ref, '')
+			if (re.search(ref, src) != None):
+				src = src.replace(ref, '')
+			if (re.search(ref, img) != None):
+				img = img.replace(ref, '')
+			if (re.search(ref, description) != None):
+				description = description.replace(ref, '')
 
 		print(str((id, name, release_year, developer, publisher, img, src, genres, description)))
 		data.append([id, name, release_year, developer, publisher, img, src, genres, description])
@@ -226,6 +243,36 @@ def getDesc(href):
 		pass
 	return default
 
+def getGenre(link):
+	global genresRead
+	default = 'n/a'
+	result = ''
+	req = requests.get(link)
+	page_soup = soup(req.text, "html.parser")
+	try:
+		infobox = page_soup.find('table', {'class': 'infobox vevent'})
+		if(infobox == None):
+			infobox = page_soup.find('table', {'class': 'infobox hproduct'})
+	except AttributeError:
+		print('no infobox')
+		return default
+
+	genres = ['Action Game', 'Fighting game', 'Platform game', 'Shooter game', 'Beat \'em up', 'Shoot \'em up', 'Stealth game', 'Survival game', 'Battle royale game', 'Rhythm game', 'Action-adventure game', 'Survival horror', 'Adventure game', 'Role-playing video game', 'Action role-playing game', 'Massively multiplayer online role-playing game', 'Roguelike', 'Tactical role-playing game', 'Sandbox game', 'Simulation video game', 'Life simulation game', 'Vehicle simulation game', 'Strategy video game', '4X game', 'Artillery game', 'Auto battler', 'Real-time strategy', 'Real-time tactics', 'Tower defense', 'Turn-based tactics', 'Sports game', 'Massively multiplayer online game', 'Digital collectible card game', 'Horror game', 'Incremental game', 'Open world', 'Survival mode', 'God game', 'Interactive film', 'Puzzle adventure game', 'Racing video game', 'Train simulator', 'Run and gun', 'Educational game', 'Puzzle', 'Puzzle video game', 'Chess', 'Simulation video game', 'Interactive fiction', 'First-person shooter', 'Strategy game', 'Point-and-click adventure', 'Adventure game', 'Business simulation game', 'Graphic adventure', 'Text adventure', 'Racing video game', 'Simulation', 'Combat flight simulation game', 'Sports video game', 'Combat flight simulator', 'Flight simulator', 'Point-and-click adventure game', 'Space trading and combat simulator', 'Role-playing game', 'Action game', 'Puzzle game', 'First-person adventure', 'Educational video game', 'Tile-matching video game', 'Space combat sim', 'Platformer', 'Turn-based strategy game', 'Fantasy', 'Animation', 'Tactical shooter', 'MOBA', 'Sim racing', 'Graphic adventure game', 'Edutainment', 'Sports', 'Multidirectional shooter', 'Video puzzle game', 'Amateur flight simulator', 'Survival horror', 'Light gun shooter', 'Adventure Game', 'Arcade', 'Construction and management simulation', 'Party game', 'Vehicular combat game', 'Simulation video games', 'Massively multiplayer online first-person shooter', 'Construction and management simulation games', 'Rail shooter', 'Third-person shooter', 'Gambling', 'City-building game', 'Construction and management simulation games', 'Educational', 'Top-down shooter', 'Third person shooter', 'Science fiction', 'Multidirectional shooter', 'action', 'action game', 'Wargame (video games)', 'Arcade game', 'Turn-based strategy', 'Scrolling shooter', 'Kart racing game', 'Simulation game', 'Computer strategy game', 'Strategy game', 'Combat', 'Naval warfare', 'Pinball', 'List of maze video games', 'Computer wargame', 'Racing', 'Action video game', 'action video game', 'Submarine simulator', 'Board game', 'Game creation system', 'Fixed shooter','Snake (video game)', 'Shoot &#39;em up', 'Metroidvania', 'Text-based game']
+	#Get the infobox
+	try:
+		for genre in genres:
+			gen = infobox.find('tbody').find('a', {'title': genre})
+			if (gen != None):
+				if(re.search(gen.get_text(), result) == None):
+					result += (gen.get_text() + '/')
+		if(len(result) > 0):
+			genresRead += 1
+			return result.strip('/')
+		else:
+			return default
+	except AttributeError:
+		return default
+
 def main():
 	global nameRead
 	global release_yearRead
@@ -246,23 +293,13 @@ def main():
 	
 	data = extractData(valRows)
 
-	with open('arcade_results.csv', 'w', newline = '') as f:
-		writer = csv.writer(f)
+	OutputFile = open('../csvs/arcade.csv','a', encoding = "utf_16")
+	OutputFile.write("id,name,release_year,developers,publishers,image,src,genres,console,description\n")
+	outputformat = "{id},\"{name}\",{release_year},[{developers}],[{publishers}],\"{img_url}\",[{src_url}],[{genres}],[{console}],\"{description}\"\n"	#the format string for the output file writes
 
-		writer.writerow(['id, name, release year, developer, publisher, img_url, src_url, genres, description'])
-
-		for row in data:
-			try:
-				writer.writerow(row)
-			except UnicodeError:
-				nameRead -= 1
-				release_yearRead -= 1
-				developerRead -= 1
-				publisherRead -= 1
-				img_urlRead -= 1
-				src_urlRead -= 1
-				genresRead -= 1
-				descriptionRead -= 1
+	for entry in data:
+		outputString = outputformat.format(id = entry[0],name = entry[1],release_year = entry[2],developers = entry[3],publishers = entry[4],img_url = entry[5],genres = entry[7], description = entry[8], src_url=entry[6], console = "Arcade cabinet")
+		OutputFile.write(outputString)
 
 	total = nameRead
 	print('Analytics:')

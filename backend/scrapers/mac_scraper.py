@@ -31,6 +31,10 @@ src_urlRead = 0
 genresRead = 0
 descriptionRead = 0
 
+references = []
+for i in range(1, 100):
+	references.append('[' + str(i) + ']')
+
 #There is a table of games for each letter of the alphabet. Parse all 27 tables and grab each row
 def getAllRows():
 	rows = []
@@ -84,21 +88,21 @@ def extractData(rows):
 
 		nameRead += 1
 		release_yearRead += 1
-		developer = ('[' + row.findAll('td')[0].get_text().replace('\n', '') + ']').replace('\"', '')
+		developer = row.findAll('td')[0].get_text().replace('\n', '')
 		developerRead += 1
-		if (len(developer) <= 2):
+		if (len(developer) == 0):
 			developer = 'n/a'
 			developerRead -= 1
-		publisher = ('[' + row.findAll('td')[0].get_text().replace('\n', '') + ']').replace('\"', '')
+		publisher = row.findAll('td')[0].get_text().replace('\n', '')
 		publisherRead += 1
-		if (len(publisher) <= 2):
+		if (len(publisher) == 0):
 			publisher = 'n/a'
 			publisherRead -= 1
 
 		#Grab the link to each title and visit that page, grabbing these attrs at that page
 		href = row.find('th').find('i').find('a')['href']
 		link = URLstarter + href
-		src_url = '[' + link + ']'
+		src_url = link
 		src_urlRead += 1
 		img_url = getImage(href[6:], name, link)
 		description = getDesc(href[6:])
@@ -108,6 +112,22 @@ def extractData(rows):
 			genres = 'Educational'
 		else:
 			genres = getGenre(link)
+
+		for ref in references:
+			if (re.search(ref, name) != None):
+				name = name.replace(ref, '')
+			if (re.search(ref, publisher) != None):
+				publisher = publisher.replace(ref, '')
+			if (re.search(ref, developer) != None):
+				developer = developer.replace(ref, '')
+			if (re.search(ref, genres) != None):
+				genres = genres.replace(ref, '')
+			if (re.search(ref, src_url) != None):
+				src_url = src_url.replace(ref, '')
+			if (re.search(ref, img_url) != None):
+				img_url = img_url.replace(ref, '')
+			if (re.search(ref, description) != None):
+				description = description.replace(ref, '')
 
 		#print(str((id, name, release_year, developer, publisher, img_url, src_url, genres, description[:50])))
 		print(str((name, genres)))
@@ -260,23 +280,14 @@ def main():
 	valRows = validateRows(rows)
 	
 	data = extractData(valRows)
-	with open('macontish_results.csv', 'w', newline = '') as f:
-		writer = csv.writer(f)
 
-		writer.writerow(['id, name, release year, developer, publisher, img_url, src_url, genres, description'])
+	OutputFile = open('../csvs/macintosh.csv','a', encoding = "utf_16")
+	OutputFile.write("id,name,release_year,developers,publishers,image,src,genres,console,description\n")
+	outputformat = "{id},\"{name}\",{release_year},[{developers}],[{publishers}],\"{img_url}\",[{src_url}],[{genres}],[{console}],\"{description}\"\n"	#the format string for the output file writes
 
-		for row in data:
-			try:
-				writer.writerow(row)
-			except UnicodeError:
-				nameRead -= 1
-				release_yearRead -= 1
-				developerRead -= 1
-				publisherRead -= 1
-				img_urlRead -= 1
-				src_urlRead -= 1
-				genresRead -= 1
-				descriptionRead -= 1
+	for entry in data:
+		outputString = outputformat.format(id = entry[0],name = entry[1],release_year = entry[2],developers = entry[3],publishers = entry[4],img_url = entry[5],genres = entry[7], description = entry[8], src_url=entry[6], console = "Macintosh")
+		OutputFile.write(outputString)
 
 	total = nameRead
 	print('Analytics:')
