@@ -50,7 +50,7 @@ for line in List[1:]:
 	results = searcher.search(q, limit = 2)		
 	if len(results)==0:
 		print("Adding as new tuple")
-		idxwriter.update_document(GID=LM.group(1),name=LM.group(2),release_year=LM.group(3),developers=LM.group(4),publishers=LM.group(5),images=LM.group(6),sources=LM.group(7),genres=LM.group(8),consoles = LM.group(9), description=LM.group(10))
+		idxwriter.update_document(GID=LM.group(1),name=LM.group(2),release_year=LM.group(3),developers=LM.group(4),publishers=LM.group(5),images=LM.group(6),sources=LM.group(7).replace('n/a',''),genres=LM.group(8).replace('n/a','').replace(',,',','),consoles = LM.group(9), description=LM.group(10))
 	else:
 		print("merging with:",results[0]['GID'],results[0]['name'])
 		if results[0]['release_year']>LM.group(3) and LM.group(3)!='n\a':#if they have different years take the smaller one
@@ -66,13 +66,13 @@ for line in List[1:]:
 		else:
 			desc = results[0]['description']
 		oldSources = results[0]['sources'].split(',')#add any new sources to the sources list
-		newSources = LM.group(7).split(',')
+		newSources = LM.group(7).replace('/',',').split(',')
 		for item in newSources:
 			if item not in oldSources:
 				oldSources.append(item)
 		Sources = ','.join(oldSources)
-		oldGenres = results[0]['genres'].split(',')#add any new genres to the genres list
-		newGenres = LM.group(8).split(',')
+		oldGenres = results[0]['genres'].replace('n/a','').split(',')#add any new genres to the genres list
+		newGenres = LM.group(8).replace('n/a','').replace('/',',').replace(',,',',').split(',')
 		for item in newGenres:
 			if item not in oldGenres:
 				oldGenres.append(item)
