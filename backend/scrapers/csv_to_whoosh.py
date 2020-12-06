@@ -48,6 +48,9 @@ for line in List[1:]:
 	print (LM.group(1)+"\t"+LM.group(2))
 	q = And([QP.parse(LM.group(2)), Term('publishers', LM.group(5).lower()), Term('developers',LM.group(4).lower())])
 	results = searcher.search(q, limit = 2)		
+	if (LM.group(3)>'2003'):#skip games after 2002
+		print("game skiped")
+		continue;
 	if len(results)==0:
 		print("Adding as new tuple")
 		idxwriter.update_document(GID=LM.group(1),name=LM.group(2),release_year=LM.group(3),developers=LM.group(4),publishers=LM.group(5),images=LM.group(6),sources=LM.group(7).replace('n/a',''),genres=LM.group(8).replace('n/a','').replace(',,',','),consoles = LM.group(9), description=LM.group(10))
