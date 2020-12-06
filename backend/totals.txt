@@ -1,9 +1,15 @@
-apple2 - 386
-arcade - 1435
-GB - 1057
-macintosh - 434
+apple2 - 406
+arcade - 1893
+atari1 - 104
+atari2 - 182
+DOS - 2358
+GB - 1056
+GBA - 371
+GBC - 663
+macintosh - 440
 N64 - 394
-Nintendo - 713
-snes - 1758
+Nintendo - 712
+segGen - 901
+snes - 1757
 
-total - 6177
+total - 11,207
