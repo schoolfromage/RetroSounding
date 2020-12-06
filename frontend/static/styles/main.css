@@ -25,6 +25,7 @@ html, body {
 	margin: 0 auto;
 	display: block;
 	width: max-content;
+	white-space: pre;
 }
 h1 {
 	font-family: 'AncientModernTales', Arial, Helvetica, sans-serif;
@@ -34,7 +35,6 @@ h1 {
 	padding: 0;
 	margin: 0;
 	display: block;
-	white-space: pre;
 }
 #searchBar {
 	margin: 0 auto;
@@ -338,4 +338,54 @@ header .pages input[type="button"]{
 .pages input[type="submit"]:focus,
 .pages input[type="submit"]:focus-within {
   border: solid 2px red;
+}
+h1.smaller {
+  font-size: 2rem;
+}
+h1.entryName {
+  font-size: 4rem;
+  margin-top: 20px;
+}
+.entry {
+  margin: 20px auto;
+  max-width: 1600px;
+  width: 95%;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  background-color: rgba(0,0,0,0.1);
+  padding: 20px;
+}
+.entry .dets {
+  font-family: 'Consolas', 'Courier New', Courier, monospace;
+  width: 60%;
+}
+.entry .image {
+  width: 30%;
+  height: auto;
+}
+.entry .image img {
+  object-fit: contain;
+  width: 100%;
+  height: 100%;
+}
+.entry p a:visited,
+.entry p a {
+  display: inline-block;
+  color: #eee;
+  background-color: rgba(0,0,0,0.3);
+  border: solid 2px transparent;
+  transition: all linear .2s;
+  padding: 0.25rem 0.75rem;
+  font-size: 1rem;
+  text-decoration: none;
+  outline: none;
+}
+.entry p a:hover,
+.entry p a:focus,
+.entry p a:focus-within {
+  border: solid 2px red;
+}
+.entry p a:active {
+  filter: invert(1)
 }

@@ -8,45 +8,75 @@
 		<title>{{ name }}</title>
 	</head>
 	<body>
-	
-		<form method="get" action="{{ url_for('results') }}">
-			<label>
-				<input type="text" name="searchterm" value ="{{ query }}" checked/>
-				<input type="submit" value="Search now"/>
-			</label>
-		</form>
-		<h1>{{ name }}</h1>
-		<div><img src="{{ images }}"/></div>
-		<p>Released in : {{ release_year }}
-		<p>developers : {{ developers }} | publishers : {{ publishers }}
-		<p>{{ description }}</p>
-		<p>available for:<br />
-			{%for item in consoles%}
-			<a href = "{{ url_for('results') }}?searchterm=consoles:({{item.lower()}}))"> {{item}} </a> <br />
-			{%endfor%}
-		</p>
-		<p>Genres:<br />
-			{%for item in genres%}
-			<a href = "{{ url_for('results') }}?searchterm=genre:({{item.lower()}}))"> {{item}} </a> <br />
-			{%endfor%}
-		</p>
-		<p> further reading: <br />
-			{%for item in sources%}
-			<a href = {{item}}>{{item}}</a> <br />
-			{%endfor%}
-		</p>
-		<form method="get" action="{{ url_for('results') }}">
-			<label style="display:none"><input type="text" value="related:{{ gid }}" name="searchterm"/></label>
-			<label><input type="submit" value="Related Games"/></label>
-		</form>
-		<form method="post" action="{{ url_for('index') }}">
-			<input type="submit" value="Search Page"/>
-		</form>	
-		<form action="{{ url_for('index') }}">
-      	<input type="submit" value="Go Home" />
-    </form>
+    <header>
+      <h1 class="smaller">Retro Sounding</h1>
+      <form method="get" action="{{ url_for('results') }}">
+        <input tabindex="1" type="text" name="searchterm" value ="{{ query }}"/>
+        <div class="checks">
+          <label class="chk">Name<input tabindex="2" type=checkbox name="name" checked/><span></span></label>
+          <label class="chk">Year<input tabindex="3" type=checkbox name="release_year" checked/><span></span></label>
+          <label class="chk">Developers<input tabindex="4" type=checkbox name="developers" checked/><span></span></label>
+          <label class="chk">Publishers<input tabindex="5" type=checkbox name="publishers" checked/><span></span></label>
+          <label class="chk">Genres<input tabindex="6" type=checkbox name="genres" checked/><span></span></label>
+          <label class="chk">Description<input tabindex="7" type=checkbox name="description" checked/><span></span></label>
+          <label class="chk">Consoles<input tabindex="8" type=checkbox name="consoles" checked/><span></span></label>
+        </div>
+				<input class="butt" type="submit" value="Search now"/>
+      </form>
+      <form method="post" action="{{ url_for('index') }}">
+        <input class="butt" type="submit" value="Go Home" />
+      </form>
+    </header>
+    <div class="entry">
+      <div class="dets">
+        <h1 class="entryName">{{ name }}</h1>
+        <p>Released in {{ release_year }}
+          <p>Developed by {{ developers }} | Published by {{ publishers }}
+          <p id="desc">{{ description }}</p>
+          <p class="consoles">Available for
+            {%for item in consoles%}
+            <a href = "{{ url_for('results') }}?searchterm=consoles:({{item.lower()}}))">{{item}}</a>
+            {%endfor%}
+          </p>
+          <p class="genres">Genres:
+            {%for item in genres%}
+            <a href = "{{ url_for('results') }}?searchterm=genre:({{item.lower()}}))"> {{item}} </a>
+            {%endfor%}
+          </p>
+          <p class="sources">For extra information:
+            {%for item in sources%}
+            <a href = {{item}}>{{item}}</a> 
+            {%endfor%}
+          </p>
+          <div class="actions">
+            <form method="post" action="{{ url_for('entry') }}">
+              <input style="display:none" type="text" name="gid" value="{{ gid }}">
+              <button class="butt" type="button" gid="{{ gid }}" id="share" onclick="Share(this)">Share</button>
+              <label class="butt" ><input type="submit" value="Info"/></label>
+            </form>
+            <form method="get" action="{{ url_for('results') }}">
+              <label style="display:none"><input type="text" value="related:{{ gid }}" name="searchterm"/></label>
+              <label><input type="submit" value="Related Games"/></label>
+            </form>
+            <form method="post" action="{{ url_for('index') }}">
+              <input type="submit" value="Search Page"/>
+            </form>	
+            <form action="{{ url_for('index') }}">
+                <input type="submit" value="Go Home" />
+            </form>
+          </div>
+      </div>
+      <div class="image"><img onerror="this.src = '/static/images/missing_image.png'" src="{{ images }}"/></div>
+    </div>
     <script type="text/javascript">
       const Share = (el) => { navigator.clipboard.writeText(`${window.location.host}/entry/?gid=${el.getAttribute("gid")}`); el.innerText="Copied to Clipboard!" }
+      document.addEventListener("DOMContentLoaded", () => {
+        str = desc.innerText
+        if(str.charAt(0) == '"' && str.charAt(str.length-1) == '"') {
+          str = str.slice(1,-1)
+        }
+        desc.innerHTML = str;
+      })
     </script>
 	</body>
 </html>
