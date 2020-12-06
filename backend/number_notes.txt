@@ -8,4 +8,3 @@ SNES	8,9
 SegGen	10
 A2600	11
 DOS 	12, 13, 15
-Atari	16
