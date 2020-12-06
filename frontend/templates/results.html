@@ -8,14 +8,22 @@
 		<title>Search results for {{ query }}</title>
 	</head>
 	<body>
-    <header><form method="get" action="{{ url_for('results') }}">
-			<label>
-				<input type="text" name="searchterm" value ="{{ query }}"/>
-				<input type="submit" value="Search now"/>
-			</label>
+    <header>
+      <form method="get" action="{{ url_for('results') }}">
+        <input tabindex="1" type="text" name="searchterm" value ="{{ query }}"/>
+        <div class="checks">
+          <label class="chk">Name<input tabindex="2" type=checkbox name="name" checked/><span></span></label>
+          <label class="chk">Year<input tabindex="3" type=checkbox name="release_year" checked/><span></span></label>
+          <label class="chk">Developers<input tabindex="4" type=checkbox name="developers" checked/><span></span></label>
+          <label class="chk">Publishers<input tabindex="5" type=checkbox name="publishers" checked/><span></span></label>
+          <label class="chk">Genres<input tabindex="6" type=checkbox name="genres" checked/><span></span></label>
+          <label class="chk">Description<input tabindex="7" type=checkbox name="description" checked/><span></span></label>
+          <label class="chk">Consoles<input tabindex="8" type=checkbox name="consoles" checked/><span></span></label>
+        </div>
+				<input class="butt" type="submit" value="Search now"/>
     </form>
-    <form action="http://127.0.0.1:5000/">
-      <input type="submit" value="Go Home" />
+    <form method="post" action="{{ url_for('index') }}">
+      <input class="butt" type="submit" value="Go Home" />
     </form>
   </header>
   <div id="main">
