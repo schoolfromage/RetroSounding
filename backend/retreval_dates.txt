@@ -7,3 +7,4 @@ segGen	12/4
 A2600	12/4
 apple2	12/5
 arcade	12/5
+dreamcast	12/5
