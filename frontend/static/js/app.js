@@ -1,6 +1,16 @@
 document.addEventListener("DOMContentLoaded", () => {
-	if (document.querySelectorAll('.result').length < 20) { npb.disabled = true; hpb.disabled = true; lp.disabled = true; hlp.disabled = true }
-	if (pp.value == '0') { ppb.disabled = true; fpb.disabled = true; hppb.disabled = true; hfpb.disabled = true }
+	if (document.querySelectorAll('.result').length < 20) {
+    npb.disabled = true;
+    hnpb.disabled = true;
+    lpb.disabled = true;
+    hlpb.disabled = true;
+  }
+	if (ppf.value == '0') {
+    ppb.disabled = true;
+    fpb.disabled = true;
+    hppb.disabled = true;
+    hfpb.disabled = true;
+  }
   replaceImageFailures();
   timeline();
 })

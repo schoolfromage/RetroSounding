@@ -89,7 +89,7 @@
         <input id="fpb" type="submit" value="First" />
       </form>
       <form method="post" action="{{ url_for('results') }}">
-        <input id="pp" style="display: none;" type="text" value="{{ p - 1 }}" name="pp">
+        <input id="ppf" style="display: none;" type="text" value="{{ p - 1 }}" name="pp">
         <input style="display: none;" type="text" value="{{ query }}" name="searchterm">
         <input id="ppb"type="submit" value="Prev" />
       </form>
@@ -97,7 +97,7 @@
         <input tabindex="-1" type="button" value="{{ p }}" style="pointer-events: none;"/>
       </form>
       <form method="post" action="{{ url_for('results') }}">
-        <input id="np" style="display: none;" type="text" value="{{ p + 1 }}" name="np">
+        <input id="npf" style="display: none;" type="text" value="{{ p + 1 }}" name="np">
         <input style="display: none;" type="text" value="{{ query }}" name="searchterm">
         <input id="npb" type="submit" value="Next" />
     </form>
