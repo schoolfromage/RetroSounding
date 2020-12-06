@@ -60,10 +60,10 @@ for line in List[1:]:
 			year = LM.group(3)
 		else:
 			year = results[0]['release_year']
-		if results[0]['images']=='n/a':#if an image doesn't already exist then try this new one
-			picture = LM.group(6)
-		else:
-			picture = results[0]['images']
+		#if results[0]['images']=='n/a':#if an image doesn't already exist then try this new one
+		picture = LM.group(6)
+		#else:
+		#	picture = results[0]['images']
 		if results[0]['description']=='n/a':#if a description doesn't already exist then try this new one
 			desc = LM.group(10)
 		else:
