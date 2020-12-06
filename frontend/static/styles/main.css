@@ -260,6 +260,7 @@ aside {
   box-sizing: border-box;
   width: 25%;
   position:relative;
+  margin-top: 20px;
 }
 canvas {
   width: 100%;
