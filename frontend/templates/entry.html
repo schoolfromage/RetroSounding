@@ -17,6 +17,7 @@
 		</form>
 		<h1>{{ name }}</h1>
 		<div><img src="{{ images }}"/></div>
+		<p>Released in : {{ release_year }}
 		<p>developers : {{ developers }} | publishers : {{ publishers }}
 		<p>{{ description }}</p>
 		<p>available for:<br />{{consoles}}</p>
@@ -28,5 +29,8 @@
 		<form method="post" action="{{ url_for('index') }}">
 			<input type="submit" value="Search Page"/>
 		</form>	
+		<form action="http://127.0.0.1:5000/">
+      		<input type="submit" value="Go Home" />
+    	</form>
 	</body>
 </html>
