@@ -43,7 +43,10 @@
 			<input type="submit" value="Search Page"/>
 		</form>	
 		<form action="{{ url_for('index') }}">
-      		<input type="submit" value="Go Home" />
-    	</form>
+      	<input type="submit" value="Go Home" />
+    </form>
+    <script type="text/javascript">
+      const Share = (el) => { navigator.clipboard.writeText(`${window.location.host}/entry/?gid=${el.getAttribute("gid")}`); el.innerText="Copied to Clipboard!" }
+    </script>
 	</body>
 </html>

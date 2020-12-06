@@ -59,21 +59,32 @@
   </div>
     <div class="pages">
       <form method="post" action="{{ url_for('results') }}">
-        <input style="display: none;" type="text" value="{{ p - 1 }}" name="pp">
+        <input style="display: none;" type="text" value="1" name="fp">
         <input style="display: none;" type="text" value="{{ query }}" name="searchterm">
-        <input id="pp" type="submit" value="{{ p - 1  }}" />
+        <input id="fp" type="submit" value="First" />
       </form>
-      <p>{{ p }}</p>
       <form method="post" action="{{ url_for('results') }}">
-        <input style="display: none;" type="text" value="{{ p + 1 }}" name="np">
+        <input id="pp" style="display: none;" type="text" value="{{ p - 1 }}" name="pp">
         <input style="display: none;" type="text" value="{{ query }}" name="searchterm">
-      <input id="np" type="submit" value="{{ p + 1 }}" />
+        <input id="ppb"type="submit" value="Prev" />
+      </form>
+      <form action="none">
+        <input type="button" value="{{ p }}" style="pointer-events: none;"/>
+      </form>
+      <form method="post" action="{{ url_for('results') }}">
+        <input id="np" style="display: none;" type="text" value="{{ p + 1 }}" name="np">
+        <input style="display: none;" type="text" value="{{ query }}" name="searchterm">
+        <input id="npb" type="submit" value="Next" />
+    </form>
+    <form method="post" action="{{ url_for('results') }}">
+      <input style="display: none;" type="text" value="?" name="lp">
+      <input style="display: none;" type="text" value="{{ query }}" name="searchterm">
+      <input id="lp" type="submit" value="Last" />
     </form>
     </div>
-    <!-- Use this script tage to store data you wanna pass using jinja -->
     <script type="text/javascript">
       const results = {{ data|tojson|safe }}
-      ;const Share = (el) => { navigator.clipboard.writeText(`${window.location.host}/entry/?gid=${el.getAttribute("gid")}`) }
+      ;const Share = (el) => { navigator.clipboard.writeText(`${window.location.host}/entry/?gid=${el.getAttribute("gid")}`); el.innerText="Copied to Clipboard!" }
     </script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/app.js') }}"></script>
 	</body>	

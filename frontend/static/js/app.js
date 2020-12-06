@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
-	if (document.querySelectorAll('.result').length < 20) { np.style = "display:none" }
-	if (pp.value == '0') { pp.style = "opacity:0;pointer-events:none;" }
+	if (document.querySelectorAll('.result').length < 20) { npb.disabled = true; lp.disabled = true }
+	if (pp.value == '0') { ppb.disabled = true; fp.disabled = true }
   replaceImageFailures();
   timeline();
 })
