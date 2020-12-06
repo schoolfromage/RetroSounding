@@ -80,14 +80,7 @@ def entry():
 	gid = data.get('gid')
 
 	name, release_year, developers, publishers, images, sources, genres, description, consoles = mysearch.retrieve(gid)
-	#print(name)
-	#print(release_year)
-	#print(developers)
-	#print(publishers)
-	#print(images)
-	#print(sources)
-	#print(genres)
-	#print(description)
+	
 	return render_template('entry.html', gid=gid, name=name, release_year=release_year, developers=developers, publishers=publishers, images=images, sources=sources, genres=genres, description=description, consoles=consoles)
 
 class MyWhooshSearch(object):

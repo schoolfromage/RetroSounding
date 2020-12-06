@@ -130,7 +130,7 @@ def extractData(rows):
 				description = description.replace(ref, '')
 
 		#print(str((id, name, release_year, developer, publisher, img_url, src_url, genres, description[:50])))
-		print(str((name, genres)))
+		print(str((name, img_url)))
 		data.append([id, name, release_year, developer, publisher, img_url, src_url, genres, description])
 		id += 1
 	return data
@@ -187,13 +187,15 @@ def getImage(href, name, link):
 
 	#Get image from infobox
 	try:
-		image = infobox.find('a', {'class': 'image'})['href']
-		img_src = URLstarter + image 
-		if len(img_src) == 0:
-			img_src = 'n/a'
-		else:
-			img_urlRead += 1
-			return img_src
+		image = infobox.find('a', {'class': 'image'}).find('img')['src']
+		img_urlRead += 1
+		return image
+		# img_src = URLstarter + image 
+		# if len(img_src) == 0:
+		# 	img_src = 'n/a'
+		# else:
+		# 	img_urlRead += 1
+		# 	return img_src
 	except (TypeError, AttributeError):
 		#no image is avaliable
 		pass
