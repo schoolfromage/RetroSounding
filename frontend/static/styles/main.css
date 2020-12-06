@@ -370,7 +370,8 @@ h1.entryName {
   height: 100%;
 }
 .entry p a:visited,
-.entry p a {
+.entry p a,
+.bu {
   display: inline-block;
   color: #eee;
   background-color: rgba(0,0,0,0.3);
@@ -380,12 +381,20 @@ h1.entryName {
   font-size: 1rem;
   text-decoration: none;
   outline: none;
+  cursor: pointer;
 }
 .entry p a:hover,
 .entry p a:focus,
-.entry p a:focus-within {
+.entry p a:focus-within,
+.bu:hover,
+.bu:focus,
+.bu:focus-within {
   border: solid 2px red;
 }
-.entry p a:active {
+.entry p a:active,
+.bu:active {
   filter: invert(1)
+}
+.entry form {
+  display: inline-block;
 }

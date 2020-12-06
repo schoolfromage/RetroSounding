@@ -49,20 +49,21 @@
             {%endfor%}
           </p>
           <div class="actions">
+            <h4>Actions:</h4>
             <form method="post" action="{{ url_for('entry') }}">
               <input style="display:none" type="text" name="gid" value="{{ gid }}">
-              <button class="butt" type="button" gid="{{ gid }}" id="share" onclick="Share(this)">Share</button>
-              <label class="butt" ><input type="submit" value="Info"/></label>
+              <button class="butt bu" type="button" gid="{{ gid }}" id="share" onclick="Share(this)">Share</button>
+              <label class="butt" ><input type="submit" class="bu" value="Info"/></label>
             </form>
             <form method="get" action="{{ url_for('results') }}">
               <label style="display:none"><input type="text" value="related:{{ gid }}" name="searchterm"/></label>
-              <label><input type="submit" value="Related Games"/></label>
+              <label><input class="bu" type="submit" value="Related Games"/></label>
             </form>
             <form method="post" action="{{ url_for('index') }}">
-              <input type="submit" value="Search Page"/>
+              <input type="submit" class="bu" value="Search Page"/>
             </form>	
             <form action="{{ url_for('index') }}">
-                <input type="submit" value="Go Home" />
+                <input type="submit" class="bu" value="Go Home" />
             </form>
           </div>
       </div>
