@@ -217,7 +217,8 @@ h1 {
   position: relative;
 }
 .result button.butt,
-.result .butt input {
+.result .butt input,
+header .butt {
   outline: none;
   border: solid 2px transparent;
   transition: all linear .2s;
@@ -233,11 +234,15 @@ h1 {
 .result button.butt:focus-within,
 .result .butt input:hover,
 .result .butt input:focus,
-.result .butt input:focus-within {
+.result .butt input:focus-within,
+header .butt:hover,
+header .butt:focus,
+header .butt:focus-within {
   border: solid 2px red;
 }
 .result button.butt:active,
-.result .butt input:active {
+.result .butt input:active,
+header .butt:active {
   filter: invert(1)
 }
 .result form {
@@ -250,7 +255,6 @@ h1 {
   background-color:rgba(0,0,0,0.1);
 }
 aside {
-  border: 2px solid blue;
   overflow: hidden;
   min-width: 250px;
   box-sizing: border-box;
@@ -265,14 +269,31 @@ canvas {
 aside>a{
   position: absolute; /*position needs to be not static for z-index to work*/
 }
-.pages {
+header {
+  display: block;
+  background-color: rgba(0,0,0,0.4);
+  margin: 20px;
+  padding: 30px;
+  max-width: 2500px;
+  margin: 0 auto;
 }
-
-.homeButton {
-    -webkit-appearance: button;
-    -moz-appearance: button;
-    appearance: button;
-
-    text-decoration: none;
-    color: initial;
-}}
+header form {
+  width: 100%;
+  display: block;
+}
+header input[type="text"] {
+  font-size: 2rem;
+  font-family: 'Consolas', 'Courier New', Courier, monospace;
+  background-color: #eee;
+  color: #2C2C2C;
+  outline: none;
+  border: solid 2px transparent;
+  transition: all linear .2s;
+  width: 100%;
+  display: block;
+}
+header input[type="text"]:hover,
+header input[type="text"]:focus-within,
+header input[type="text"]:focus {
+  border: solid 2px red;
+}
