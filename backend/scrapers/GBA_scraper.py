@@ -1,12 +1,11 @@
 #!/bin/python
 
 #Austin Cari
-#apple2_scraper.py
+#GBA_scraper.py
 
 #This scraper goes alongside the web-app Retro Sounding, and is used to scrape raw data from Wikipedia (and maybe other sites)
 
-#This script specifically scrapes all the games at THIS wikipedia article: List of Apple II games
-
+#This script specifically scrapes all the games at THIS wikipedia article: List of Game Boy Advance games
 from urllib.request import urlopen
 import requests
 from bs4 import BeautifulSoup as soup
@@ -28,7 +27,7 @@ genresRead = 0
 descriptionRead = 0
 
 URLstarter = "https://en.wikipedia.org"	#used only for the file output
-HUBpage = 'https://en.wikipedia.org/wiki/List_of_Apple_II_games'
+HUBpage = 'https://en.wikipedia.org/wiki/List_of_Game_Boy_Advance_games'
 
 references = []
 for i in range(1, 100):
@@ -43,7 +42,7 @@ def getAllRows(url):
 
 	#Make some soup and grab every row from the main table in the body
 	page_soup = soup(page_html, "html.parser")
-	table = page_soup.find('table', {'class': 'wikitable sortable'})
+	table = page_soup.findAll('table', {'class': 'wikitable sortable'})[1]
 	allRows = table.findAll('tr')
 	#Grab the single table form this page
 
@@ -57,10 +56,10 @@ def validateRows(rows):
 	for row in rows:
 		try:
 			cells = row.findAll('td')
-			if (int(cells[1].get_text()) < 2003):
-				if(cells[0].find('i').find('a') != None):
+			if (int(cells[2].get_text()) < 2003):
+				if(re.search('redlink', cells[0].find('i').find('a')['href']) == None):
 					valRows.append(row)
-		except (ValueError, AttributeError):
+		except (ValueError, TypeError, AttributeError):
 			pass
 
 	return valRows
@@ -73,10 +72,9 @@ def extractData(rows):
 	global publisherRead 
 	global src_urlRead 
 	global genresRead
-	global references
 
 	data = []
-	id = 7000
+	id = 12000
 
 	for row in rows:
 		cells = row.findAll('td')
@@ -86,50 +84,37 @@ def extractData(rows):
 		nameRead += 1
 		
 		# release year
-		release_year = (cells[1].get_text()).replace('\n', '')
+		release_year = (cells[2].get_text()).replace('\n', '')
 		release_yearRead += 1
 
 		# developer
-		developer = cells[2].get_text().replace('\n', '')
+		developer = cells[3].get_text().replace('\n', '')
 		developerRead += 1
 		if (len(developer) <= 2):
 			developer = 'n/a'
 			developerRead -= 1
 
 		# publisher
-		publisher = cells[3].get_text().replace('\n', '')
+		publisher = cells[4].get_text().replace('\n', '')
 		publisherRead += 1
 		if (len(publisher) <= 2):
 			publisher = 'n/a'
 			publisherRead -= 1
 
-
 		# src
 		href = row.find('td').find('i').find('a')['href']
 		link = URLstarter + href
 		src = link.replace('\n', '')
-		# if (len(src) == 0):
-		# 	src = 'n/a'
+		if( re.search('redlink', src) != None):
+			src = 'n/a'
 		src_urlRead += 1
 
-		# img & desc & genres
+		# img & desc
 		img = getImage(href, name, link)
-		if (len(img) == 0):
-			img = 'n/a'
 		description = getDesc(href[6:]) 
-		if(re.search('Jeopardy!', name) != None):
-			genres = 'Trivia'
-		elif(re.search('Space', name) != None):
-			genres = 'Space'
-		else:
-			genres =  getGenre(link)
-			if (genres != 'n/a'):
-				genres = genres.replace('/', ', ')
-
-		if(developer != 'n/a') and (publisher == 'n/a'):
-			publisher = developer
-		elif(developer == 'n/a') and (publisher != 'n/a'):
-			developer = publisher
+		genres = getGenre(link)
+		if (genres != 'n/a'):
+			genres = genres.replace('/', ', ')
 
 		for ref in references:
 			if (re.search(ref, name) != None):
@@ -147,8 +132,7 @@ def extractData(rows):
 			if (re.search(ref, description) != None):
 				description = description.replace(ref, '')
 
-		#print(str((id, name, release_year, developer, publisher, img_url, src_url, genres, description[:50])))
-		print(str((name, src)))
+		print(str((id, name, release_year, developer, publisher, img, src, genres, description)))
 		data.append([id, name, release_year, developer, publisher, img, src, genres, description])
 		id += 1
 	return data
@@ -157,10 +141,7 @@ def getImage(href, name, link):
 	global img_urlRead
 	#Method #1: Grab the picture in the infobox using bs
 	default = 'n/a'
-	try:
-		req = requests.get(link)
-	except requests.exceptions.ConnectionError:
-		return 'n/a'
+	req = requests.get(link)
 	page_soup = soup(req.text, "html.parser")
 
 	#Get the infobox
@@ -288,7 +269,6 @@ def getGenre(link):
 			return default
 	except AttributeError:
 		return default
-
 def main():
 	global nameRead
 	global release_yearRead
@@ -306,12 +286,12 @@ def main():
 
 	data = extractData(valRows)
 
-	OutputFile = open('../csvs/apple2.csv','a', encoding = "utf_16")
+	OutputFile = open('../csvs/GBA.csv','a', encoding = "utf_16")
 	OutputFile.write("id,name,release_year,developers,publishers,image,src,genres,console,description\n")
 	outputformat = "{id},\"{name}\",{release_year},[{developers}],[{publishers}],\"{img_url}\",[{src_url}],[{genres}],[{console}],\"{description}\"\n"	#the format string for the output file writes
 
 	for entry in data:
-		outputString = outputformat.format(id = entry[0],name = entry[1],release_year = entry[2],developers = entry[3],publishers = entry[4],img_url = entry[5],genres = entry[7], description = entry[8], src_url=entry[6], console = "Apple II")
+		outputString = outputformat.format(id = entry[0],name = entry[1],release_year = entry[2],developers = entry[3],publishers = entry[4],img_url = entry[5],genres = entry[7], description = entry[8], src_url=entry[6], console = "GameBoy Advance")
 		OutputFile.write(outputString)
 
 	total = nameRead

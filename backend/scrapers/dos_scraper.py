@@ -1,11 +1,11 @@
 #!/bin/python
 
 #Austin Cari
-#apple2_scraper.py
+#DOS_scraper.py
 
 #This scraper goes alongside the web-app Retro Sounding, and is used to scrape raw data from Wikipedia (and maybe other sites)
 
-#This script specifically scrapes all the games at THIS wikipedia article: List of Apple II games
+#This script specifically scrapes all the games at THIS wikipedia article: Index of DOS games 
 
 from urllib.request import urlopen
 import requests
@@ -28,7 +28,11 @@ genresRead = 0
 descriptionRead = 0
 
 URLstarter = "https://en.wikipedia.org"	#used only for the file output
-HUBpage = 'https://en.wikipedia.org/wiki/List_of_Apple_II_games'
+HUBpage = 'https://en.wikipedia.org/wiki/Index_of_DOS_games_('
+alphabet = ['0-9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+pages_to_visit = []
+for letter in alphabet:
+	pages_to_visit.append(HUBpage + letter + ')')
 
 references = []
 for i in range(1, 100):
@@ -58,9 +62,9 @@ def validateRows(rows):
 		try:
 			cells = row.findAll('td')
 			if (int(cells[1].get_text()) < 2003):
-				if(cells[0].find('i').find('a') != None):
+				if(re.search('redlink', cells[0].find('i').find('a')['href']) == None):
 					valRows.append(row)
-		except (ValueError, AttributeError):
+		except (ValueError, TypeError, AttributeError):
 			pass
 
 	return valRows
@@ -73,10 +77,9 @@ def extractData(rows):
 	global publisherRead 
 	global src_urlRead 
 	global genresRead
-	global references
 
 	data = []
-	id = 7000
+	id = 12000
 
 	for row in rows:
 		cells = row.findAll('td')
@@ -103,33 +106,20 @@ def extractData(rows):
 			publisher = 'n/a'
 			publisherRead -= 1
 
-
 		# src
 		href = row.find('td').find('i').find('a')['href']
 		link = URLstarter + href
 		src = link.replace('\n', '')
-		# if (len(src) == 0):
-		# 	src = 'n/a'
+		if( re.search('redlink', src) != None):
+			src = 'n/a'
 		src_urlRead += 1
 
-		# img & desc & genres
+		# img & desc
 		img = getImage(href, name, link)
-		if (len(img) == 0):
-			img = 'n/a'
 		description = getDesc(href[6:]) 
-		if(re.search('Jeopardy!', name) != None):
-			genres = 'Trivia'
-		elif(re.search('Space', name) != None):
-			genres = 'Space'
-		else:
-			genres =  getGenre(link)
-			if (genres != 'n/a'):
-				genres = genres.replace('/', ', ')
-
-		if(developer != 'n/a') and (publisher == 'n/a'):
-			publisher = developer
-		elif(developer == 'n/a') and (publisher != 'n/a'):
-			developer = publisher
+		genres = getGenre(link)
+		if (genres != 'n/a'):
+			genres = genres.replace('/', ', ')
 
 		for ref in references:
 			if (re.search(ref, name) != None):
@@ -147,8 +137,7 @@ def extractData(rows):
 			if (re.search(ref, description) != None):
 				description = description.replace(ref, '')
 
-		#print(str((id, name, release_year, developer, publisher, img_url, src_url, genres, description[:50])))
-		print(str((name, src)))
+		print(str((id, name, release_year, developer, publisher, img, src, genres, description)))
 		data.append([id, name, release_year, developer, publisher, img, src, genres, description])
 		id += 1
 	return data
@@ -238,7 +227,10 @@ def getDesc(href):
 		for page in res['query']['pages']:
 			pid = page
 		try:
-			mypage = wikipedia.page(pageid=pid)
+			try:
+				mypage = wikipedia.page(pageid=pid)
+			except wikipedia.exceptions.PageError:
+				return default
 			descriptionRead += 1
 			return mypage.summary.replace('\n', ' ')
 		except AttributeError:
@@ -263,7 +255,10 @@ def getGenre(link):
 	global genresRead
 	default = 'n/a'
 	result = ''
-	req = requests.get(link)
+	try:
+		req = requests.get(link)
+	except requests.exceptions.ConnectionError:
+		return 'n/a'
 	page_soup = soup(req.text, "html.parser")
 	try:
 		infobox = page_soup.find('table', {'class': 'infobox vevent'})
@@ -300,18 +295,22 @@ def main():
 	global descriptionRead
 	global pages_to_visit
 
-	initRows = getAllRows(HUBpage)
+	initRows = []
+
+	for page in pages_to_visit:
+		initRows.extend(getAllRows(page))
+	
 	
 	valRows = validateRows(initRows)
 
 	data = extractData(valRows)
 
-	OutputFile = open('../csvs/apple2.csv','a', encoding = "utf_16")
+	OutputFile = open('../csvs/dos.csv','a', encoding = "utf_16")
 	OutputFile.write("id,name,release_year,developers,publishers,image,src,genres,console,description\n")
 	outputformat = "{id},\"{name}\",{release_year},[{developers}],[{publishers}],\"{img_url}\",[{src_url}],[{genres}],[{console}],\"{description}\"\n"	#the format string for the output file writes
 
 	for entry in data:
-		outputString = outputformat.format(id = entry[0],name = entry[1],release_year = entry[2],developers = entry[3],publishers = entry[4],img_url = entry[5],genres = entry[7], description = entry[8], src_url=entry[6], console = "Apple II")
+		outputString = outputformat.format(id = entry[0],name = entry[1],release_year = entry[2],developers = entry[3],publishers = entry[4],img_url = entry[5],genres = entry[7], description = entry[8], src_url=entry[6], console = "Microsoft DOS")
 		OutputFile.write(outputString)
 
 	total = nameRead

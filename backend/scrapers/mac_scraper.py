@@ -139,7 +139,10 @@ def getGenre(link):
 	global genresRead
 	default = 'n/a'
 	result = ''
-	req = requests.get(link)
+	try:
+		req = requests.get(link)
+	except requests.exceptions.ConnectionError:
+		return 'n/a'
 	page_soup = soup(req.text, "html.parser")
 	try:
 		infobox = page_soup.find('table', {'class': 'infobox vevent'})
@@ -149,7 +152,7 @@ def getGenre(link):
 		print('no infobox')
 		return default
 
-	genres = ['Action Game', 'Fighting game', 'Platform game', 'Shooter game', 'Beat \'em up', 'Shoot \'em up', 'Stealth game', 'Survival game', 'Battle royale game', 'Rhythm game', 'Action-adventure game', 'Survival horror', 'Adventure game', 'Role-playing video game', 'Action role-playing game', 'Massively multiplayer online role-playing game', 'Roguelike', 'Tactical role-playing game', 'Sandbox game', 'Simulation video game', 'Life simulation game', 'Vehicle simulation game', 'Strategy video game', '4X game', 'Artillery game', 'Auto battler', 'Real-time strategy', 'Real-time tactics', 'Tower defense', 'Turn-based tactics', 'Sports game', 'Massively multiplayer online game', 'Digital collectible card game', 'Horror game', 'Incremental game', 'Open world', 'Survival mode', 'God game', 'Interactive film', 'Puzzle adventure game', 'Racing video game', 'Train simulator', 'Run and gun', 'Educational game', 'Puzzle', 'Puzzle video game', 'Chess', 'Simulation video game', 'Interactive fiction', 'First-person shooter', 'Strategy game', 'Point-and-click adventure', 'Adventure game', 'Business simulation game', 'Graphic adventure', 'Text adventure', 'Racing video game', 'Simulation', 'Combat flight simulation game', 'Sports video game', 'Combat flight simulator', 'Flight simulator', 'Point-and-click adventure game', 'Space trading and combat simulator', 'Role-playing game', 'Action game', 'Puzzle game', 'First-person adventure', 'Educational video game', 'Tile-matching video game', 'Space combat sim', 'Platformer', 'Turn-based strategy game', 'Fantasy', 'Animation', 'Tactical shooter', 'MOBA', 'Sim racing', 'Graphic adventure game', 'Edutainment', 'Sports', 'Multidirectional shooter', 'Video puzzle game', 'Amateur flight simulator', 'Survival horror', 'Light gun shooter', 'Adventure Game', 'Arcade', 'Construction and management simulation', 'Party game', 'Vehicular combat game', 'Simulation video games', 'Massively multiplayer online first-person shooter', 'Construction and management simulation games', 'Rail shooter', 'Third-person shooter', 'Gambling', 'City-building game', 'Construction and management simulation games', 'Educational', 'Top-down shooter', 'Third person shooter', 'Science fiction', 'Multidirectional shooter', 'action', 'action game', 'Wargame (video games)', 'Arcade game', 'Turn-based strategy', 'Scrolling shooter', 'Kart racing game', 'Simulation game', 'Computer strategy game', 'Strategy game', 'Combat', 'Naval warfare', 'Pinball', 'List of maze video games', 'Computer wargame', 'Racing', 'Action video game', 'action video game', 'Submarine simulator', 'Board game', 'Game creation system', 'Fixed shooter','Snake (video game)', 'Shoot &#39;em up', 'Metroidvania']
+	genres = ['Action Game', 'Fighting game', 'Platform game', 'Shooter game', 'Beat \'em up', 'Shoot \'em up', 'Stealth game', 'Survival game', 'Battle royale game', 'Rhythm game', 'Action-adventure game', 'Survival horror', 'Adventure game', 'Role-playing video game', 'Action role-playing game', 'Massively multiplayer online role-playing game', 'Roguelike', 'Tactical role-playing game', 'Sandbox game', 'Simulation video game', 'Life simulation game', 'Vehicle simulation game', 'Strategy video game', '4X game', 'Artillery game', 'Auto battler', 'Real-time strategy', 'Real-time tactics', 'Tower defense', 'Turn-based tactics', 'Sports game', 'Massively multiplayer online game', 'Digital collectible card game', 'Horror game', 'Incremental game', 'Open world', 'Survival mode', 'God game', 'Interactive film', 'Puzzle adventure game', 'Racing video game', 'Train simulator', 'Run and gun', 'Educational game', 'Puzzle', 'Puzzle video game', 'Chess', 'Simulation video game', 'Interactive fiction', 'First-person shooter', 'Strategy game', 'Point-and-click adventure', 'Adventure game', 'Business simulation game', 'Graphic adventure', 'Text adventure', 'Racing video game', 'Simulation', 'Combat flight simulation game', 'Sports video game', 'Combat flight simulator', 'Flight simulator', 'Point-and-click adventure game', 'Space trading and combat simulator', 'Role-playing game', 'Action game', 'Puzzle game', 'First-person adventure', 'Educational video game', 'Tile-matching video game', 'Space combat sim', 'Platformer', 'Turn-based strategy game', 'Fantasy', 'Animation', 'Tactical shooter', 'MOBA', 'Sim racing', 'Graphic adventure game', 'Edutainment', 'Sports', 'Multidirectional shooter', 'Video puzzle game', 'Amateur flight simulator', 'Survival horror', 'Light gun shooter', 'Adventure Game', 'Arcade', 'Construction and management simulation', 'Party game', 'Vehicular combat game', 'Simulation video games', 'Massively multiplayer online first-person shooter', 'Construction and management simulation games', 'Rail shooter', 'Third-person shooter', 'Gambling', 'City-building game', 'Construction and management simulation games', 'Educational', 'Top-down shooter', 'Third person shooter', 'Science fiction', 'Multidirectional shooter', 'action', 'action game', 'Wargame (video games)', 'Arcade game', 'Turn-based strategy', 'Scrolling shooter', 'Kart racing game', 'Simulation game', 'Computer strategy game', 'Strategy game', 'Combat', 'Naval warfare', 'Pinball', 'List of maze video games', 'Computer wargame', 'Racing', 'Action video game', 'action video game', 'Submarine simulator', 'Board game', 'Game creation system', 'Fixed shooter','Snake (video game)', 'Shoot &#39;em up', 'Metroidvania', 'Adult video game']
 	#Get the infobox
 	try:
 		for genre in genres:
@@ -169,7 +172,10 @@ def getImage(href, name, link):
 	global img_urlRead
 	#Method #1: Grab the picture in the infobox using bs
 	default = 'n/a'
-	req = requests.get(link)
+	try:
+		req = requests.get(link)
+	except requests.exceptions.ConnectionError:
+		return 'n/a'
 	page_soup = soup(req.text, "html.parser")
 
 	#Get the infobox

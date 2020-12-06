@@ -1,11 +1,11 @@
 #!/bin/python
 
 #Austin Cari
-#apple2_scraper.py
+#atari2_scraper.py
 
 #This scraper goes alongside the web-app Retro Sounding, and is used to scrape raw data from Wikipedia (and maybe other sites)
 
-#This script specifically scrapes all the games at THIS wikipedia article: List of Apple II games
+#This script specifically scrapes all the games at THIS wikipedia article: List of Atari 2600 games section 2
 
 from urllib.request import urlopen
 import requests
@@ -15,6 +15,7 @@ import time
 import csv 
 import json
 import re
+from urllib.parse import urlencode
 
 start_time = time.time()
 
@@ -28,8 +29,7 @@ genresRead = 0
 descriptionRead = 0
 
 URLstarter = "https://en.wikipedia.org"	#used only for the file output
-HUBpage = 'https://en.wikipedia.org/wiki/List_of_Apple_II_games'
-
+HUBpage = 'https://en.wikipedia.org/wiki/List_of_Atari_2600_games'
 references = []
 for i in range(1, 100):
 	references.append('[' + str(i) + ']')
@@ -43,7 +43,7 @@ def getAllRows(url):
 
 	#Make some soup and grab every row from the main table in the body
 	page_soup = soup(page_html, "html.parser")
-	table = page_soup.find('table', {'class': 'wikitable sortable'})
+	table = page_soup.findAll('table', {'class': 'wikitable sortable'})[1]
 	allRows = table.findAll('tr')
 	#Grab the single table form this page
 
@@ -57,10 +57,10 @@ def validateRows(rows):
 	for row in rows:
 		try:
 			cells = row.findAll('td')
-			if (int(cells[1].get_text()) < 2003):
-				if(cells[0].find('i').find('a') != None):
+			if (int(cells[3].get_text()) < 2003):
+				if(re.search('redlink', cells[0].find('i').find('a')['href']) == None):
 					valRows.append(row)
-		except (ValueError, AttributeError):
+		except (ValueError, TypeError, AttributeError):
 			pass
 
 	return valRows
@@ -72,64 +72,40 @@ def extractData(rows):
 	global developerRead 
 	global publisherRead 
 	global src_urlRead 
-	global genresRead
-	global references
-
+	global genresRead 
+	
 	data = []
-	id = 7000
-
+	id = 16000 #Must increment ID, but dont fuck with Steven's existing data
 	for row in rows:
-		cells = row.findAll('td')
+		name = str(row.find('td').get_text().replace('\n', ''))
+		release_year = row.findAll('td')[3].get_text().replace('\n', '')
 
-		# name
-		name = (cells[0].find('i').find('a').get_text()).replace('\n', '')
 		nameRead += 1
-		
-		# release year
-		release_year = (cells[1].get_text()).replace('\n', '')
 		release_yearRead += 1
-
-		# developer
-		developer = cells[2].get_text().replace('\n', '')
+		developer = row.findAll('td')[1].get_text().replace('\n', '')
 		developerRead += 1
-		if (len(developer) <= 2):
+		if (len(developer) == 0):
 			developer = 'n/a'
 			developerRead -= 1
-
-		# publisher
-		publisher = cells[3].get_text().replace('\n', '')
+		publisher = row.findAll('td')[2].get_text().replace('\n', '')
 		publisherRead += 1
-		if (len(publisher) <= 2):
+		if (len(publisher) == 0):
 			publisher = 'n/a'
 			publisherRead -= 1
 
-
-		# src
+		#Grab the link to each title and visit that page, grabbing these attrs at that page
 		href = row.find('td').find('i').find('a')['href']
 		link = URLstarter + href
-		src = link.replace('\n', '')
-		# if (len(src) == 0):
-		# 	src = 'n/a'
+		src_url = link
 		src_urlRead += 1
-
-		# img & desc & genres
-		img = getImage(href, name, link)
-		if (len(img) == 0):
-			img = 'n/a'
-		description = getDesc(href[6:]) 
-		if(re.search('Jeopardy!', name) != None):
-			genres = 'Trivia'
-		elif(re.search('Space', name) != None):
-			genres = 'Space'
+		img_url = getImage(href[6:], name, link)
+		description = getDesc(href[6:])
+		if(re.search('Pinball', name) != None):
+			genres = 'Arcade'
+		elif(re.search('Reader Rabbit', name) != None):
+			genres = 'Educational'
 		else:
-			genres =  getGenre(link)
-			if (genres != 'n/a'):
-				genres = genres.replace('/', ', ')
-
-		if(developer != 'n/a') and (publisher == 'n/a'):
-			publisher = developer
-		elif(developer == 'n/a') and (publisher != 'n/a'):
-			developer = publisher
+			genres = getGenre(link)
 
 		for ref in references:
 			if (re.search(ref, name) != None):
@@ -140,27 +116,54 @@ def extractData(rows):
 				developer = developer.replace(ref, '')
 			if (re.search(ref, genres) != None):
 				genres = genres.replace(ref, '')
-			if (re.search(ref, src) != None):
-				src = src.replace(ref, '')
-			if (re.search(ref, img) != None):
-				img = img.replace(ref, '')
+			if (re.search(ref, src_url) != None):
+				src_url = src_url.replace(ref, '')
+			if (re.search(ref, img_url) != None):
+				img_url = img_url.replace(ref, '')
 			if (re.search(ref, description) != None):
 				description = description.replace(ref, '')
 
 		#print(str((id, name, release_year, developer, publisher, img_url, src_url, genres, description[:50])))
-		print(str((name, src)))
-		data.append([id, name, release_year, developer, publisher, img, src, genres, description])
+		print(str((name, genres)))
+		data.append([id, name, release_year, developer, publisher, img_url, src_url, genres, description])
 		id += 1
 	return data
+
+def getGenre(link):
+	global genresRead
+	default = 'n/a'
+	result = ''
+	req = requests.get(link)
+	page_soup = soup(req.text, "html.parser")
+	try:
+		infobox = page_soup.find('table', {'class': 'infobox vevent'})
+		if(infobox == None):
+			infobox = page_soup.find('table', {'class': 'infobox hproduct'})
+	except AttributeError:
+		print('no infobox')
+		return default
+
+	genres = ['Action Game', 'Fighting game', 'Platform game', 'Shooter game', 'Beat \'em up', 'Shoot \'em up', 'Stealth game', 'Survival game', 'Battle royale game', 'Rhythm game', 'Action-adventure game', 'Survival horror', 'Adventure game', 'Role-playing video game', 'Action role-playing game', 'Massively multiplayer online role-playing game', 'Roguelike', 'Tactical role-playing game', 'Sandbox game', 'Simulation video game', 'Life simulation game', 'Vehicle simulation game', 'Strategy video game', '4X game', 'Artillery game', 'Auto battler', 'Real-time strategy', 'Real-time tactics', 'Tower defense', 'Turn-based tactics', 'Sports game', 'Massively multiplayer online game', 'Digital collectible card game', 'Horror game', 'Incremental game', 'Open world', 'Survival mode', 'God game', 'Interactive film', 'Puzzle adventure game', 'Racing video game', 'Train simulator', 'Run and gun', 'Educational game', 'Puzzle', 'Puzzle video game', 'Chess', 'Simulation video game', 'Interactive fiction', 'First-person shooter', 'Strategy game', 'Point-and-click adventure', 'Adventure game', 'Business simulation game', 'Graphic adventure', 'Text adventure', 'Racing video game', 'Simulation', 'Combat flight simulation game', 'Sports video game', 'Combat flight simulator', 'Flight simulator', 'Point-and-click adventure game', 'Space trading and combat simulator', 'Role-playing game', 'Action game', 'Puzzle game', 'First-person adventure', 'Educational video game', 'Tile-matching video game', 'Space combat sim', 'Platformer', 'Turn-based strategy game', 'Fantasy', 'Animation', 'Tactical shooter', 'MOBA', 'Sim racing', 'Graphic adventure game', 'Edutainment', 'Sports', 'Multidirectional shooter', 'Video puzzle game', 'Amateur flight simulator', 'Survival horror', 'Light gun shooter', 'Adventure Game', 'Arcade', 'Construction and management simulation', 'Party game', 'Vehicular combat game', 'Simulation video games', 'Massively multiplayer online first-person shooter', 'Construction and management simulation games', 'Rail shooter', 'Third-person shooter', 'Gambling', 'City-building game', 'Construction and management simulation games', 'Educational', 'Top-down shooter', 'Third person shooter', 'Science fiction', 'Multidirectional shooter', 'action', 'action game', 'Wargame (video games)', 'Arcade game', 'Turn-based strategy', 'Scrolling shooter', 'Kart racing game', 'Simulation game', 'Computer strategy game', 'Strategy game', 'Combat', 'Naval warfare', 'Pinball', 'List of maze video games', 'Computer wargame', 'Racing', 'Action video game', 'action video game', 'Submarine simulator', 'Board game', 'Game creation system', 'Fixed shooter','Snake (video game)', 'Shoot &#39;em up', 'Metroidvania', 'Adult video game']
+	#Get the infobox
+	try:
+		for genre in genres:
+			gen = infobox.find('tbody').find('a', {'title': genre})
+			if (gen != None):
+				if(re.search(gen.get_text(), result) == None):
+					result += (gen.get_text() + '/')
+		if(len(result) > 0):
+			genresRead += 1
+			return result.strip('/')
+		else:
+			return default
+	except AttributeError:
+		return default
 
 def getImage(href, name, link):
 	global img_urlRead
 	#Method #1: Grab the picture in the infobox using bs
 	default = 'n/a'
-	try:
-		req = requests.get(link)
-	except requests.exceptions.ConnectionError:
-		return 'n/a'
+	req = requests.get(link)
 	page_soup = soup(req.text, "html.parser")
 
 	#Get the infobox
@@ -234,17 +237,14 @@ def getDesc(href):
 	query = 'https://en.wikipedia.org/w/api.php?action=query&format=json&titles=' + href
 	client = urlopen(query)
 	res = json.loads(client.read())
+	for page in res['query']['pages']:
+		pid = page
 	try:
-		for page in res['query']['pages']:
-			pid = page
-		try:
-			mypage = wikipedia.page(pageid=pid)
-			descriptionRead += 1
-			return mypage.summary.replace('\n', ' ')
-		except AttributeError:
-			pass
-	except KeyError:
-		return default
+		mypage = wikipedia.page(pageid=pid)
+		descriptionRead += 1
+		return mypage.summary.replace('\n', ' ')
+	except AttributeError:
+		pass
 
 	try:
 		descriptionRead += 1
@@ -258,36 +258,6 @@ def getDesc(href):
 	except (wikipedia.exceptions.PageError, wikipedia.exceptions.DisambiguationError):
 		pass
 	return default
-
-def getGenre(link):
-	global genresRead
-	default = 'n/a'
-	result = ''
-	req = requests.get(link)
-	page_soup = soup(req.text, "html.parser")
-	try:
-		infobox = page_soup.find('table', {'class': 'infobox vevent'})
-		if(infobox == None):
-			infobox = page_soup.find('table', {'class': 'infobox hproduct'})
-	except AttributeError:
-		print('no infobox')
-		return default
-
-	genres = ['Action Game', 'Fighting game', 'Platform game', 'Shooter game', 'Beat \'em up', 'Shoot \'em up', 'Stealth game', 'Survival game', 'Battle royale game', 'Rhythm game', 'Action-adventure game', 'Survival horror', 'Adventure game', 'Role-playing video game', 'Action role-playing game', 'Massively multiplayer online role-playing game', 'Roguelike', 'Tactical role-playing game', 'Sandbox game', 'Simulation video game', 'Life simulation game', 'Vehicle simulation game', 'Strategy video game', '4X game', 'Artillery game', 'Auto battler', 'Real-time strategy', 'Real-time tactics', 'Tower defense', 'Turn-based tactics', 'Sports game', 'Massively multiplayer online game', 'Digital collectible card game', 'Horror game', 'Incremental game', 'Open world', 'Survival mode', 'God game', 'Interactive film', 'Puzzle adventure game', 'Racing video game', 'Train simulator', 'Run and gun', 'Educational game', 'Puzzle', 'Puzzle video game', 'Chess', 'Simulation video game', 'Interactive fiction', 'First-person shooter', 'Strategy game', 'Point-and-click adventure', 'Adventure game', 'Business simulation game', 'Graphic adventure', 'Text adventure', 'Racing video game', 'Simulation', 'Combat flight simulation game', 'Sports video game', 'Combat flight simulator', 'Flight simulator', 'Point-and-click adventure game', 'Space trading and combat simulator', 'Role-playing game', 'Action game', 'Puzzle game', 'First-person adventure', 'Educational video game', 'Tile-matching video game', 'Space combat sim', 'Platformer', 'Turn-based strategy game', 'Fantasy', 'Animation', 'Tactical shooter', 'MOBA', 'Sim racing', 'Graphic adventure game', 'Edutainment', 'Sports', 'Multidirectional shooter', 'Video puzzle game', 'Amateur flight simulator', 'Survival horror', 'Light gun shooter', 'Adventure Game', 'Arcade', 'Construction and management simulation', 'Party game', 'Vehicular combat game', 'Simulation video games', 'Massively multiplayer online first-person shooter', 'Construction and management simulation games', 'Rail shooter', 'Third-person shooter', 'Gambling', 'City-building game', 'Construction and management simulation games', 'Educational', 'Top-down shooter', 'Third person shooter', 'Science fiction', 'Multidirectional shooter', 'action', 'action game', 'Wargame (video games)', 'Arcade game', 'Turn-based strategy', 'Scrolling shooter', 'Kart racing game', 'Simulation game', 'Computer strategy game', 'Strategy game', 'Combat', 'Naval warfare', 'Pinball', 'List of maze video games', 'Computer wargame', 'Racing', 'Action video game', 'action video game', 'Submarine simulator', 'Board game', 'Game creation system', 'Fixed shooter','Snake (video game)', 'Shoot &#39;em up', 'Metroidvania', 'Adult video game']
-	#Get the infobox
-	try:
-		for genre in genres:
-			gen = infobox.find('tbody').find('a', {'title': genre})
-			if (gen != None):
-				if(re.search(gen.get_text(), result) == None):
-					result += (gen.get_text() + '/')
-		if(len(result) > 0):
-			genresRead += 1
-			return result.strip('/')
-		else:
-			return default
-	except AttributeError:
-		return default
 
 def main():
 	global nameRead
@@ -306,12 +276,12 @@ def main():
 
 	data = extractData(valRows)
 
-	OutputFile = open('../csvs/apple2.csv','a', encoding = "utf_16")
+	OutputFile = open('../csvs/atari2.csv','a', encoding = "utf_16")
 	OutputFile.write("id,name,release_year,developers,publishers,image,src,genres,console,description\n")
 	outputformat = "{id},\"{name}\",{release_year},[{developers}],[{publishers}],\"{img_url}\",[{src_url}],[{genres}],[{console}],\"{description}\"\n"	#the format string for the output file writes
 
 	for entry in data:
-		outputString = outputformat.format(id = entry[0],name = entry[1],release_year = entry[2],developers = entry[3],publishers = entry[4],img_url = entry[5],genres = entry[7], description = entry[8], src_url=entry[6], console = "Apple II")
+		outputString = outputformat.format(id = entry[0],name = entry[1],release_year = entry[2],developers = entry[3],publishers = entry[4],img_url = entry[5],genres = entry[7], description = entry[8], src_url=entry[6], console = "Atari 2600")
 		OutputFile.write(outputString)
 
 	total = nameRead
