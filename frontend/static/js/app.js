@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 	if (document.querySelectorAll('.result').length < 20) { np.style = "display:none" }
-	if (pp.value == '0') { pp.style = "display:none" }
+	if (pp.value == '0') { pp.style = "opacity:0;pointer-events:none;" }
   replaceImageFailures();
   timeline();
 })

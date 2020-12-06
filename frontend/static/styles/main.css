@@ -298,3 +298,10 @@ header input[type="text"]:focus-within,
 header input[type="text"]:focus {
   border: solid 2px red;
 }
+header h1 {
+  margin-bottom: 10px;
+}
+.pages {
+  display: flex;
+  flex-flow: row nowrap;
+}
