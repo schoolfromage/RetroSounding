@@ -28,27 +28,27 @@
       </form>
       <div class="pages">
         <form method="post" action="{{ url_for('results') }}">
-          <input style="display: none;" type="text" value="1" name="fp">
+          <input id="hfp" style="display: none;" type="text" value="1" name="fp">
           <input style="display: none;" type="text" value="{{ query }}" name="searchterm">
-          <input id="fp" type="submit" value="First" />
+          <input id="hfpb" type="submit" value="First" />
         </form>
         <form method="post" action="{{ url_for('results') }}">
-          <input id="pp" style="display: none;" type="text" value="{{ p - 1 }}" name="pp">
+          <input id="hpp" style="display: none;" type="text" value="{{ p - 1 }}" name="pp">
           <input style="display: none;" type="text" value="{{ query }}" name="searchterm">
-          <input id="ppb"type="submit" value="Prev" />
+          <input id="hppb"type="submit" value="Prev" />
         </form>
         <form action="none">
-          <input type="button" value="{{ p }}" style="pointer-events: none;"/>
+          <input tabindex="-1" type="button" value="{{ p }}" style="pointer-events: none;"/>
         </form>
         <form method="post" action="{{ url_for('results') }}">
-          <input id="np" style="display: none;" type="text" value="{{ p + 1 }}" name="np">
+          <input id="hnp" style="display: none;" type="text" value="{{ p + 1 }}" name="np">
           <input style="display: none;" type="text" value="{{ query }}" name="searchterm">
-          <input id="npb" type="submit" value="Next" />
+          <input id="hnpb" type="submit" value="Next" />
         </form>
         <form method="post" action="{{ url_for('results') }}">
-          <input style="display: none;" type="text" value="?" name="lp">
+          <input id="hlp"style="display: none;" type="text" value="?" name="lp">
           <input style="display: none;" type="text" value="{{ query }}" name="searchterm">
-          <input id="lp" type="submit" value="Last" />
+          <input id="hlpb" type="submit" value="Last" />
         </form>
       </div>
     </header>
@@ -84,9 +84,9 @@
   </div>
     <div class="pages">
       <form method="post" action="{{ url_for('results') }}">
-        <input style="display: none;" type="text" value="1" name="fp">
+        <input id="fp" style="display: none;" type="text" value="1" name="fp">
         <input style="display: none;" type="text" value="{{ query }}" name="searchterm">
-        <input id="fp" type="submit" value="First" />
+        <input id="fpb" type="submit" value="First" />
       </form>
       <form method="post" action="{{ url_for('results') }}">
         <input id="pp" style="display: none;" type="text" value="{{ p - 1 }}" name="pp">
@@ -94,7 +94,7 @@
         <input id="ppb"type="submit" value="Prev" />
       </form>
       <form action="none">
-        <input type="button" value="{{ p }}" style="pointer-events: none;"/>
+        <input tabindex="-1" type="button" value="{{ p }}" style="pointer-events: none;"/>
       </form>
       <form method="post" action="{{ url_for('results') }}">
         <input id="np" style="display: none;" type="text" value="{{ p + 1 }}" name="np">
@@ -102,9 +102,9 @@
         <input id="npb" type="submit" value="Next" />
     </form>
     <form method="post" action="{{ url_for('results') }}">
-      <input style="display: none;" type="text" value="?" name="lp">
+      <input id="lp" style="display: none;" type="text" value="?" name="lp">
       <input style="display: none;" type="text" value="{{ query }}" name="searchterm">
-      <input id="lp" type="submit" value="Last" />
+      <input id="lpb" type="submit" value="Last" />
     </form>
     </div>
     <script type="text/javascript">

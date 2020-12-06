@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
-	if (document.querySelectorAll('.result').length < 20) { npb.disabled = true; lp.disabled = true }
-	if (pp.value == '0') { ppb.disabled = true; fp.disabled = true }
+	if (document.querySelectorAll('.result').length < 20) { npb.disabled = true; hpb.disabled = true; lp.disabled = true; hlp.disabled = true }
+	if (pp.value == '0') { ppb.disabled = true; fpb.disabled = true; hppb.disabled = true; hfpb.disabled = true }
   replaceImageFailures();
   timeline();
 })
