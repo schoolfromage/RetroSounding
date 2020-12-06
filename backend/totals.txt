@@ -12,4 +12,4 @@ Nintendo - 712
 segGen - 901
 snes - 1757
 
-total - 11,207
+total - 11,207 (duplicates not accounted for)
