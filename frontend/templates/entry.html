@@ -20,8 +20,21 @@
 		<p>Released in : {{ release_year }}
 		<p>developers : {{ developers }} | publishers : {{ publishers }}
 		<p>{{ description }}</p>
-		<p>available for:<br />{{consoles}}</p>
-		<p>Genres: {{ genres }} </p>
+		<p>available for:<br />
+			{%for item in consoles%}
+			<a href = "{{ url_for('results') }}?searchterm=consoles:({{item.lower()}}))"> {{item}} </a> <br />
+			{%endfor%}
+		</p>
+		<p>Genres:<br />
+			{%for item in genres%}
+			<a href = "{{ url_for('results') }}?searchterm=genre:({{item.lower()}}))"> {{item}} </a> <br />
+			{%endfor%}
+		</p>
+		<p> further reading: <br />
+			{%for item in sources%}
+			<a href = {{item}}>{{item}}</a> <br />
+			{%endfor%}
+		</p>
 		<form method="get" action="{{ url_for('results') }}">
 			<label style="display:none"><input type="text" value="related:{{ gid }}" name="searchterm"/></label>
 			<label><input type="submit" value="Related Games"/></label>
@@ -29,7 +42,7 @@
 		<form method="post" action="{{ url_for('index') }}">
 			<input type="submit" value="Search Page"/>
 		</form>	
-		<form action="http://127.0.0.1:5000/">
+		<form action="{{ url_for('index') }}">
       		<input type="submit" value="Go Home" />
     	</form>
 	</body>

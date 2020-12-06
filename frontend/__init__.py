@@ -156,10 +156,10 @@ class MyWhooshSearch(object):
 			developers = result[0]['developers']
 			publishers = result[0]['publishers']
 			images = result[0]['images']
-			sources = result[0]['sources']
-			genres = result[0]['genres']
+			sources = result[0]['sources'].split(',')
+			genres = result[0]['genres'].split(',')
 			description = result[0]['description']
-			consoles = result[0]['consoles']
+			consoles = result[0]['consoles'].split(',')
 
 		return name, release_year, developers, publishers, images, sources, genres, description, consoles
 
