@@ -129,7 +129,10 @@ class MyWhooshSearch(object):
 				release_year.append(x['release_year'])
 				developers.append(x['developers'])
 				publishers.append(x['publishers'])
-				images.append(x['images'])
+				if x['images'] != 'n/a':
+					images.append(x['images'])
+				else:
+					images.append("/static/images/missing_image.png")#the default no image image
 				sources.append(x['sources'])
 				genres.append(x['genres'])
 				description.append(x['description'])
