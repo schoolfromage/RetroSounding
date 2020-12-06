@@ -8,4 +8,5 @@ SNES	8,9
 SegGen	10
 A2600	11
 DOS 	12, 13, 14
-
+fam	15
+zx	16
