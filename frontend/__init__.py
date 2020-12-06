@@ -5,6 +5,7 @@ from flask import Flask, render_template, url_for, request
 import whoosh
 from whoosh.fields import *
 from whoosh.qparser import MultifieldParser
+from whoosh.qparser import OrGroup
 from random import randint #used for the random page button
 import json
 
@@ -102,7 +103,8 @@ class MyWhooshSearch(object):
 		gids = list()
 		consoles = list()
 
-		parser = MultifieldParser(fields, schema=self.indexer.schema) #this is used for both related queries and reqular ones
+		myGroup = OrGroup.factory(0.5)#the OrGroup allows optional or on the default search alowing complex queries, but slowing the searcher down
+		parser = MultifieldParser(fields, schema=self.indexer.schema, group = myGroup) #this is used for both related queries and reqular ones
 		query = None #temp value - this value is alwayse changed before the search
 
 		relatedMatch =re.match(r'(.*)related:(\w*)(.*)',queryEntered)#0=whole match, 1=before, 2=data, 3=after for match.group(#)
