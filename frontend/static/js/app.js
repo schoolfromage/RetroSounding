@@ -1,8 +1,19 @@
 document.addEventListener("DOMContentLoaded", () => {
 	if (document.querySelectorAll('.result').length < 20) { np.style = "display:none" }
 	if (pp.value == '0') { pp.style = "display:none" }
-	timeline();
+  replaceImageFailures();
+  timeline();
 })
+const replaceImageFailures = () => {
+  r = /(i?)\.(jpg|png|gif)$/i;
+  const images = document.querySelectorAll(".thumb img");
+  for (let i of images) {
+    console.log(i)
+    if(i.getAttribute("src").search(r) == -1) {
+      i.src = "/static/images/missing_image.png"
+    }
+  }
+}
 const timeline = () => {
 	sortedDates = results.map(a => a[1]).sort()
 	oldest = Number(sortedDates[0])
