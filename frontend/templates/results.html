@@ -22,11 +22,36 @@
           <label class="chk">Consoles<input tabindex="8" type=checkbox name="consoles" checked/><span></span></label>
         </div>
 				<input class="butt" type="submit" value="Search now"/>
-    </form>
-    <form method="post" action="{{ url_for('index') }}">
-      <input class="butt" type="submit" value="Go Home" />
-    </form>
-  </header>
+      </form>
+      <form method="post" action="{{ url_for('index') }}">
+        <input class="butt" type="submit" value="Go Home" />
+      </form>
+      <div class="pages">
+        <form method="post" action="{{ url_for('results') }}">
+          <input style="display: none;" type="text" value="1" name="fp">
+          <input style="display: none;" type="text" value="{{ query }}" name="searchterm">
+          <input id="fp" type="submit" value="First" />
+        </form>
+        <form method="post" action="{{ url_for('results') }}">
+          <input id="pp" style="display: none;" type="text" value="{{ p - 1 }}" name="pp">
+          <input style="display: none;" type="text" value="{{ query }}" name="searchterm">
+          <input id="ppb"type="submit" value="Prev" />
+        </form>
+        <form action="none">
+          <input type="button" value="{{ p }}" style="pointer-events: none;"/>
+        </form>
+        <form method="post" action="{{ url_for('results') }}">
+          <input id="np" style="display: none;" type="text" value="{{ p + 1 }}" name="np">
+          <input style="display: none;" type="text" value="{{ query }}" name="searchterm">
+          <input id="npb" type="submit" value="Next" />
+        </form>
+        <form method="post" action="{{ url_for('results') }}">
+          <input style="display: none;" type="text" value="?" name="lp">
+          <input style="display: none;" type="text" value="{{ query }}" name="searchterm">
+          <input id="lp" type="submit" value="Last" />
+        </form>
+      </div>
+    </header>
   <div id="main">
     <div id="resultsWrapper">
         {% for n, r, p, gid, img in results %}

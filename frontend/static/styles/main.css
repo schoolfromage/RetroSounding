@@ -301,6 +301,17 @@ header input[type="text"]:focus {
 header h1 {
   margin-bottom: 10px;
 }
+header .pages {
+  margin: 10px 0 0 0;
+  justify-content: flex-start;
+}
+header .pages form {
+  width: initial;
+}
+header .pages input[type="submit"],
+header .pages input[type="button"]{
+  font-size: 1rem;
+}
 .pages {
   display: flex;
   flex-flow: row nowrap;
@@ -317,7 +328,14 @@ header h1 {
   font-family: 'Consolas', 'Courier New', Courier, monospace;
   font-size: 1.2rem;
   margin-right: 10px;
+  cursor: pointer;
 }
-.pages input[type="submit"]:disabled {
+.pages input[type="submit"]:disabled,
+.pages input[type="submit"]:active {
   filter: invert(1);
+}
+.pages input[type="submit"]:hover,
+.pages input[type="submit"]:focus,
+.pages input[type="submit"]:focus-within {
+  border: solid 2px red;
 }
