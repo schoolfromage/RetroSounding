@@ -9,6 +9,7 @@ This project has been split into a frontend, where the HTML templates and flask 
 === How to Run ===
 1. Make sure you have the correct dependencies installed
 
+      *Python 3.8 and higher is required*
      * On MacOS, Linux, Command prompt: 
 
         `pip3 install flask whoosh`
