@@ -29,6 +29,18 @@ def results():
 		data = request.args
 	
 	keywordquery = data.get('searchterm')
+	
+	minyear = data.get('minyear')
+	maxyear = data.get('maxyear')
+	if minyear == None:
+		minyear = ''
+	if maxyear == None:
+		maxyear = ''
+	if (minyear!='' or maxyear!=''):
+		yearText='release_year:['+str(minyear)+' TO '+str(maxyear)+'] '
+		keywordquery = yearText + keywordquery
+
+		
 	rang = 15000
 	if not keywordquery:
 		gid = randint(0,rang)
@@ -53,14 +65,6 @@ def results():
 		fields.append('description')
 	if data.get('consoles'):
 		fields.append('consoles')
-
-	
-	minyear = data.get('minyear')
-	maxyear = data.get('maxyear')
-	if (minyear and maxyear):#if not None
-		if (minyear!='' or maxyear!=''):
-			yearText='release_year:['+str(minyear)+' TO '+str(maxyear)+'] '
-			keywordquery = yearText + keywordquery
 
 	ppage = data.get('pp')
 	if not ppage:

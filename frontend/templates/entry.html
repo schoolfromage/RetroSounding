@@ -35,12 +35,12 @@
           <p id="desc">{{ description }}</p>
           <p class="consoles">Available for
             {%for item in consoles%}
-            <a href = "{{ url_for('results') }}?searchterm=consoles:({{item.lower()}}))">{{item}}</a>
+            <a href = "{{ url_for('results') }}?searchterm=consoles:'{{item.lower()}}'">{{item}}</a>
             {%endfor%}
           </p>
           <p class="genres">Genres:
             {%for item in genres%}
-            <a href = "{{ url_for('results') }}?searchterm=genre:({{item.lower()}}))"> {{item}} </a>
+            <a href = "{{ url_for('results') }}?searchterm=genre:'{{item.lower()}}'"> {{item}} </a>
             {%endfor%}
           </p>
           <p class="sources">For extra information:
