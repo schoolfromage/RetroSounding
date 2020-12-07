@@ -1,5 +1,3 @@
-
-
 This repository is a submisison by Austin Cari, Steven Arbuckle and Daniel Belousov for CS 454 Information Retrieval w/ Prof. Ben McCamish at WSU Vancouver.
 
 RetroSounding is a web application that uses Flask as a frontend tool to dynamically create web pages using results and records from a Whoosh! Index on the backend that is storing data about retro-style video games. Our database contains information about video game titles from as early as Pong up to the year 2000. To put that into perspective, the extremely successful franchise The Sims was first released by Maxis on Feburary 4th, 2000.
@@ -19,8 +17,8 @@ This project has been split into a frontend, where the HTML templates and flask 
 
 2. Run the app from the root directory using:   `python3 frontend/__init__.py`
 
-3. Open your browser and go to `http://127.0.0.1/5000/`
+Boot up the app run the app using: 
+`python3 init.py`
 
-=== How to use ===
+Open your browser and go to http://127.0.0.1/5000/
 
-All you have to do is enter a search term into the search bar and you will see a list of results to choose from. Keep entering queries until you find the game you're looking for.
