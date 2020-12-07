@@ -44,10 +44,10 @@ const timeline = () => {
 	
 	
 	var range = youngest-oldest+2;//add 2 years for the top and bottom bracket
-	if (range<10){//if the range is uncomfertably small then make it bigger
-		oldest -= 4;
-		youngest += 4;
-		range+=8;
+	while (range<10){//if the range is uncomfertably small then make it bigger
+		oldest -= 1;
+		youngest += 1;
+		range+=2;
 	}
 	var spacing = (h-40)/range;//the spacing between years on the timeline
 	var filled = []; //an array containing the # of objects at place [index]
@@ -98,13 +98,15 @@ const timeline = () => {
 		
 		var veriticalPlace = filled[place]
 		console.log(veriticalPlace);
-		picture = document.getElementById(item[3]);
-		clone = picture.cloneNode(true);
-		clone.style.maxHeight = (h/21).toString()+"px";
-		clone.style.maxWidth = (w/6).toString()+"px";
-		clone.style.top = (place*spacing+(veriticalPlace%2*10)-5).toString()+"px";
-		clone.style.left = (w/2-(veriticalPlace*50)).toString()+"px";
-		clone.style.zIndex = item[3].toString(); //setting the z index to the gid //doesnt actually matter as long as unique > 0 value
-		myCanvas.parentElement.insertBefore(clone,myCanvas);
+		if (veriticalPlace <= 5){//the cap for how many games per year
+			picture = document.getElementById(item[3]);
+			clone = picture.cloneNode(true);
+			clone.style.maxHeight = (h/21).toString()+"px";
+			clone.style.maxWidth = (w/6).toString()+"px";
+			clone.style.top = (place*spacing+(veriticalPlace%2*30)-25).toString()+"px";
+			clone.style.left = (w/2-(veriticalPlace*45)).toString()+"px";
+			clone.style.zIndex = item[3].toString(); //setting the z index to the gid //doesnt actually matter as long as unique > 0 value
+			myCanvas.parentElement.insertBefore(clone,myCanvas);
+		}
 	}
 }
