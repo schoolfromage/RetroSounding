@@ -7,7 +7,8 @@ from whoosh.fields import *
 from whoosh.qparser import MultifieldParser
 from whoosh.qparser import OrGroup
 from random import randint #used for the random page button
-import json
+from urllib.request import urlopen
+from urllib.parse import urlparse
 
 from whoosh.query import And, Or, Not, Term #used for the relevent result custom query
 import re #used for the query management
@@ -50,7 +51,7 @@ def results():
 		fields.append('description')
 	if data.get('consoles'):
 		fields.append('consoles')
-	
+
 	ppage = data.get('pp')
 	npage = data.get('np')
 	page = 1
@@ -74,15 +75,17 @@ def entry():
 	gid = data.get('gid')
 
 	name, release_year, developers, publishers, images, sources, genres, description, consoles = mysearch.retrieve(gid)
-	#print(name)
-	#print(release_year)
-	#print(developers)
-	#print(publishers)
-	#print(images)
-	#print(sources)
-	#print(genres)
-	#print(description)
-	return render_template('entry.html', gid=gid, name=name, release_year=release_year, developers=developers, publishers=publishers, images=images, sources=sources, genres=genres, description=description, consoles=consoles)
+	validSources = list()
+
+	for s in sources:
+		try:
+			urlparse(s)
+			if urlopen(s).getcode() == 200:
+				validSources.append(s)
+		except:
+			print("invalid url")
+
+	return render_template('entry.html', gid=gid, name=name, release_year=release_year, developers=developers, publishers=publishers, images=images, sources=validSources, genres=genres, description=description, consoles=consoles)
 
 class MyWhooshSearch(object):
 	"""docstring for MyWhooshSearch"""
