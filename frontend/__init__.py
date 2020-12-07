@@ -80,7 +80,7 @@ def entry():
 	gid = data.get('gid')
 
 	name, release_year, developers, publishers, images, sources, genres, description, consoles = mysearch.retrieve(gid)
-	
+
 	return render_template('entry.html', gid=gid, name=name, release_year=release_year, developers=developers, publishers=publishers, images=images, sources=sources, genres=genres, description=description, consoles=consoles)
 
 class MyWhooshSearch(object):
@@ -123,7 +123,7 @@ class MyWhooshSearch(object):
 			print(query)
 
 		with self.indexer.searcher() as search:
-			results = search.search_page(query, page, pagelen=20)
+			results = search.search_page(query, page, pagelen=10)
 
 			for x in results:
 				name.append(x['name'])
