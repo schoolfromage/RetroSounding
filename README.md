@@ -8,16 +8,15 @@ This project has been split into a frontend, where the HTML templates and flask 
 
 ===How to Run===
 1. Make sure you have the correct dependencies installed
+
   a) Install dependencies using pip MacOS, Linux, Commpand prompt: 
 
-  `pip3 install flask` 
-  
+  `pip3 install flask` and then
   `pip3 install whoosh`
   
   b) Windows Powershell: 
 
-  `python3 -m pip install flask` 
-  
+  `python3 -m pip install flask` and then
   `python3 -m pip install whoosh`
   
 
@@ -25,3 +24,5 @@ This project has been split into a frontend, where the HTML templates and flask 
 
 3. Open your browser and go to http://127.0.0.1/5000/
 
+===How to use===
+All you have to do is enter a search term into the search bar and you will see a list of results to choose from. Keep entering queries until you find the game you're looking for.
