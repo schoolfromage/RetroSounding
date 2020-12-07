@@ -69,7 +69,7 @@ for line in List[1:]:
 		else:
 			desc = results[0]['description']
 		oldSources = results[0]['sources'].split(',')#add any new sources to the sources list
-		newSources = LM.group(7).replace('/',',').split(',')
+		newSources = LM.group(7).split(',')
 		for item in newSources:
 			if item not in oldSources:
 				oldSources.append(item)

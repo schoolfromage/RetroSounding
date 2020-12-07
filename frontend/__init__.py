@@ -29,7 +29,7 @@ def results():
 	
 	keywordquery = data.get('searchterm')
 	if not keywordquery:
-		gid = randint(0,5000)
+		gid = randint(0,17000)
 		name, release_year, developers, publishers, images, sources, genres, description, consoles = mysearch.retrieve(gid)
 		while not name:
 			name, release_year, developers, publishers, images, sources, genres, description, consoles = mysearch.retrieve(randint(0,5000))
@@ -52,6 +52,13 @@ def results():
 	if data.get('consoles'):
 		fields.append('consoles')
 
+	
+	minyear = data.get('minyear')
+	maxyear = data.get('maxyear')
+	if (minyear and maxyear):#if not None
+		if (minyear!='' or maxyear!=''):
+			yearText='release_year:['+str(minyear)+' TO '+str(maxyear)+'] '
+			keywordquery = yearText + keywordquery
 	ppage = data.get('pp')
 	npage = data.get('np')
 	page = 1
@@ -158,7 +165,7 @@ class MyWhooshSearch(object):
 			release_year = result[0]['release_year']
 			developers = result[0]['developers']
 			publishers = result[0]['publishers']
-			images = result[0]['images']
+			images = result[0]['images']	
 			sources = result[0]['sources'].split(',')
 			genres = result[0]['genres'].split(',')
 			description = result[0]['description']
