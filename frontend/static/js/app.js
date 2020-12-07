@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-	if (document.querySelectorAll('.result').length < 20) {
+	if (document.querySelectorAll('.result').length < 10) {
     npb.disabled = true;
     hnpb.disabled = true;
     lpb.disabled = true;

@@ -65,15 +65,19 @@ h1 {
 	caret-color: currentColor;
 	color: #2C2C2C;
 	border: none;
-	outline: none;
+  outline: none;
 }
-.searchBar input::selection {
+.searchBar input::selection,
+.balances input::selection {
 	color: #eee;
 	background: #2C2C2C;
 }
 .searchBar:hover,
 .searchBar:focus,
-.searchBar:focus-within {
+.searchBar:focus-within,
+.balances input:hover,
+.balances input:focus,
+.balances input:focus-within {
 	border: solid 2px red;
 }
 #searchBar .btn {
@@ -81,7 +85,7 @@ h1 {
 	overflow: hidden;
 	color: #eee;
 	position: relative;
-	background-color: rgba(0,0,0,0.1);
+	background-color: rgba(0,0,0,0.3);
 	border: solid 2px #2C2C2C;
 	width: 300px;
 	margin: 0 auto;
@@ -126,10 +130,34 @@ h1 {
   margin-top: 20px;
 }
 .balances {
-  max-width:60%;
+  width: 100%;
   margin:10px;
-  padding:5px;
   background-color: rgba(0,0,0,0.3);
+  font-family: 'Consolas', 'Courier New', Courier, monospace;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 1rem 0;
+}
+.balances input {
+  font-family: inherit;
+  font-size: inherit;
+	font-weight: 700;
+	letter-spacing: 1px;
+	font-size: 1rem;
+	caret-color: currentColor;
+	color: #2C2C2C;
+	border: none;
+  outline: none;
+  border: solid 2px transparent;
+  transition: all linear .2s;
+}
+#wrapper form p {
+  background-color: rgba(0, 0, 0, 0.3);
+  font-family: 'Consolas', 'Courier New', Courier, monospace;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.5rem 0;
+  margin-bottom: 0;
 }
 .chk {
   font-family: 'SuperLegendBoy', 'Courier New', Courier, monospace;
@@ -346,7 +374,7 @@ header .pages input[type="button"]{
   border: solid 2px red;
 }
 h1.smaller {
-  font-size: 2rem;
+  font-size: 5rem;
 }
 h1.entryName {
   font-size: 4rem;

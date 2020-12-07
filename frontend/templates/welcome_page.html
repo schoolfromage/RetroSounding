@@ -14,21 +14,21 @@
 			<div id="searchBar">
 				<form method="get" action="{{ url_for('results') }}">
 					<label class="searchBar"><input tabindex="1" type="text" name="searchterm" checked/></label>
-					<label class="btn submit"><input tabindex="9" type="submit" value="Search now"/></label>
-					<label class="btn random"><input tabindex="10" type="submit" value="Random Page" onClick="rand()"/></label>
-					<p> Advanced Search: </p>
+					<label class="btn submit"><input tabindex="2" type="submit" value="Search now"/></label>
+					<label class="btn random"><input tabindex="3" type="submit" value="Random Page" onClick="rand()"/></label>
+					<p> -------- Advanced Search -------- </p>
 					<div class="checks">
-						<label class="chk">Name<input tabindex="2" type=checkbox name="name" checked/><span></span></label>
-						<label class="chk">Year<input tabindex="3" type=checkbox name="release_year" checked/><span></span></label>
-						<label class="chk">Developers<input tabindex="4" type=checkbox name="developers" checked/><span></span></label>
-						<label class="chk">Publishers<input tabindex="5" type=checkbox name="publishers" checked/><span></span></label>
-						<label class="chk">Genres<input tabindex="6" type=checkbox name="genres" checked/><span></span></label>
-						<label class="chk">Description<input tabindex="7" type=checkbox name="description" checked/><span></span></label>
-						<label class="chk">Consoles<input tabindex="8" type=checkbox name="consoles" checked/><span></span></label>
+						<label class="chk">Name<input tabindex="4" type=checkbox name="name" checked/><span></span></label>
+						<label class="chk">Year<input tabindex="5" type=checkbox name="release_year" checked/><span></span></label>
+						<label class="chk">Developers<input tabindex="6" type=checkbox name="developers" checked/><span></span></label>
+						<label class="chk">Publishers<input tabindex="7" type=checkbox name="publishers" checked/><span></span></label>
+						<label class="chk">Genres<input tabindex="8" type=checkbox name="genres" checked/><span></span></label>
+						<label class="chk">Description<input tabindex="9" type=checkbox name="description" checked/><span></span></label>
+						<label class="chk">Consoles<input tabindex="10" type=checkbox name="consoles" checked/><span></span></label>
 					</div>
 					<div class="balances">
 						<label>Year</label>
-							<input type="text" name="minyear" ></input> to <input type="text" name="maxyear"></input>
+							<input tabindex="11" type="text" name="minyear" ></input> to <input tabindex="12" type="text" name="maxyear"></input>
 					</div>
 				</form>
 			</div>
