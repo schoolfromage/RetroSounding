@@ -8,8 +8,12 @@ This project has been split into a frontend, where the HTML templates and flask 
 
 ===How to Run===
 1. Make sure you have the correct dependencies installed
--Install dependencies using pip MacOS, Linux, Commpand prompt: `pip3 install flask pip3 install whoosh`
--Windows Powershell: `python3 -m pip install flask python3 -m pip install whoosh`
+  a) Install dependencies using pip MacOS, Linux, Commpand prompt: 
+  `pip3 install flask 
+  pip3 install whoosh`
+  b) Windows Powershell: 
+  `python3 -m pip install flask 
+  python3 -m pip install whoosh`
 
 2. Boot up the app run the app using: `python3 frontend/__init__.py`
 
