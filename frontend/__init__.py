@@ -109,6 +109,10 @@ def entry():
 		except:
 			print("invalid url")
 
+	l = '/error/'
+	if not validSources:
+		validSources.append(l)
+
 	return render_template('entry.html', gid=gid, name=name, release_year=release_year, developers=developers, publishers=publishers, images=images, sources=validSources, genres=genres, description=description, consoles=consoles)
 
 @app.route('/error/', methods=['GET', 'POST'])
