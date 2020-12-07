@@ -227,7 +227,7 @@ h1 {
   border: solid 2px #2C2C2C;
 /*transition: border linear .2s;*/
 }
-/*.result:hover,*/
+
 .result:focus,
 .result:focus-within {
   border: solid 2px red;
@@ -235,6 +235,7 @@ h1 {
 .result .name {
   font-size: 1.8rem;
   margin-bottom: 10px;
+  font-family: 'SuperLegendBoy', 'Courier New', Courier, monospace;
 }
 .result .year {
   font-size: 1.3rem;
