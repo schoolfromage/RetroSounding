@@ -9,6 +9,7 @@ from whoosh.qparser import OrGroup
 from random import randint #used for the random page button
 from urllib.request import urlopen
 from urllib.parse import urlparse
+from math import ceil
 
 from whoosh.query import And, Or, Not, Term #used for the relevent result custom query
 import re #used for the query management
@@ -59,17 +60,32 @@ def results():
 		if (minyear!='' or maxyear!=''):
 			yearText='release_year:['+str(minyear)+' TO '+str(maxyear)+'] '
 			keywordquery = yearText + keywordquery
+
 	ppage = data.get('pp')
+	if not ppage:
+		ppage = data.get('hpp')
 	npage = data.get('np')
+	if not npage:
+		npage = data.get('hnp')
+
+	lpage = data.get('lp')
+	if not lpage:
+		lpage = data.get('hlp')
+
 	page = 1
+	pages = 1
 	if ppage:
 		page = int(ppage)
 	if npage:
 		page = int(npage)
+	if lpage:
+		pages = int(lpage)
+		page = int(lpage)
+
 	print(page)
-	name, release_year, publishers, gids, consoles, images, page = mysearch.search(keywordquery, fields, page)
+	name, release_year, publishers, gids, consoles, images, page, pages = mysearch.search(keywordquery, fields, page)
 	d=list(zip(name, release_year, publishers, gids, consoles, images))
-	return render_template('results.html', data=d, p=page, query=keywordquery, results=zip(name, release_year, publishers, gids, images))
+	return render_template('results.html', data=d, p=page, ps=pages, query=keywordquery, results=zip(name, release_year, publishers, gids, images))
 
 @app.route('/entry/', methods=['GET', 'POST'])
 def entry():
@@ -151,7 +167,12 @@ class MyWhooshSearch(object):
 				consoles.append(x['consoles'])
 				gids.append(x['GID'])
 
-		return name, release_year, publishers, gids, consoles, images, page
+		pages = 0
+		with self.indexer.searcher() as search:
+			results = search.search(query, limit=None)
+			pages = ceil(len(results) / 10)
+
+		return name, release_year, publishers, gids, consoles, images, page, pages
 
 	def retrieve(self, gid):
 		with self.indexer.searcher() as search:
