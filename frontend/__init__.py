@@ -29,11 +29,12 @@ def results():
 		data = request.args
 	
 	keywordquery = data.get('searchterm')
+	rang = 15000
 	if not keywordquery:
-		gid = randint(0,17000)
+		gid = randint(0,rang)
 		name, release_year, developers, publishers, images, sources, genres, description, consoles = mysearch.retrieve(gid)
 		while not name:
-			name, release_year, developers, publishers, images, sources, genres, description, consoles = mysearch.retrieve(randint(0,5000))
+			name, release_year, developers, publishers, images, sources, genres, description, consoles = mysearch.retrieve(randint(0,rang))
 		return render_template('entry.html', gid=gid, name=name, release_year=release_year, developers=developers, publishers=publishers, images=images, sources=sources, genres=genres, description=description, consoles=consoles)
 	print('Keyword Query is: ' + keywordquery)
 	
