@@ -11,7 +11,7 @@ This project has been split into a frontend, where the HTML templates and flask 
 -Install dependencies using pip MacOS, Linux, Commpand prompt: pip3 install flask pip3 install whoosh
 -Windows Powershell: python3 -m pip install flask python3 -m pip install whoosh
 
-2. Boot up the app run the app using: python3 init.py
+2. Boot up the app run the app using: python3 frontend/__init__.py
 
 3. Open your browser and go to http://127.0.0.1/5000/
 
