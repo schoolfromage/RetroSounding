@@ -74,7 +74,7 @@ def extractData(rows):
 	global genresRead
 
 	data = []
-	id = 12000
+	id = 17000
 
 	for row in rows:
 		cells = row.findAll('td')
