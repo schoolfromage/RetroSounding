@@ -80,10 +80,7 @@ for line in List[1:]:
 			if item not in oldGenres:
 				oldGenres.append(item)
 		Genres = ','.join(oldGenres)
-		consoles = results[0]['consoles']
-		NewConsole = LM.group(9)
-		if NewConsole not in consoles.split(','): #add the new console onto the list
-			consoles+=','+NewConsole
+		consoles = results[0]['consoles']+','+ LM.group(9) #add the new console onto the list
 		idxwriter.update_document(GID=results[0]['GID'],name=LM.group(2),release_year=year,developers=LM.group(4),publishers=LM.group(5),images=picture,sources=Sources,genres=Genres, consoles = consoles, description=desc)
 searcher.close()
 idxwriter.commit(optimize=True)
