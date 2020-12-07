@@ -111,6 +111,10 @@ def entry():
 
 	return render_template('entry.html', gid=gid, name=name, release_year=release_year, developers=developers, publishers=publishers, images=images, sources=validSources, genres=genres, description=description, consoles=consoles)
 
+@app.route('/error/', methods=['GET', 'POST'])
+def error():
+	return render_template('error.html')
+
 class MyWhooshSearch(object):
 	"""docstring for MyWhooshSearch"""
 	def __init__(self):
