@@ -36,8 +36,12 @@ def results():
 		minyear = ''
 	if maxyear == None:
 		maxyear = ''
+	if (minyear!=''):#if minyear still has stuff:
+		minyear = minyear+' ';#the formating for this command is difficult for me to code cleanly
+	if (maxyear!=''):#if maxyear still has stuff:
+		maxyear = ' '+maxyear;
 	if (minyear!='' or maxyear!=''):
-		yearText='release_year:['+str(minyear)+' TO '+str(maxyear)+'] '
+		yearText='release_year:['+str(minyear)+'TO'+str(maxyear)+'] '
 		keywordquery = yearText + keywordquery
 
 		
