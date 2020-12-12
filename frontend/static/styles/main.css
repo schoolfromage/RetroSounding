@@ -36,6 +36,14 @@ h1 {
 	margin: 0;
 	display: block;
 }
+footer {
+	margin-top:40px;
+	margin-left:-5px;
+	margin-right:5px;
+	margin-bottom:10px;
+	width: 100%;
+	text-align: right;
+}
 #searchBar {
 	margin: 0 auto;
 	display: block;
