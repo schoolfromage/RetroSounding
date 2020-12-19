@@ -89,7 +89,7 @@ def get_section_number(Name, Section):
 	
 def cleanup_year(year):#finds the first sequence of 4 numbers for a year
 	if (year != None):
-		match = re.findall(r'[0-9]{4}',year)
+		match = re.findall(r'(?:19|20)[0-9]{2}',year)
 		if match!=[]:
 			return min(match)#find and only save the 4 sequencial numbers
 		else:
@@ -111,8 +111,8 @@ def Scrape(file):
 	store = lxml.html.fromstring(MainText)#turning the HTML text into a lxml etree
 	tableData = store.xpath("//table//tr")
 	print(len(tableData))
-	i = 2999
-	for row in tableData:
+	i = 3245
+	for row in tableData[247:]:
 		data = row.findall(".//td")
 		if (len(data)>9):
 			Link = data[0].find(".//a[1]")
@@ -131,7 +131,7 @@ def Scrape(file):
 			year = cleanup_year(data[5].text_content())
 			i+=1
 			URL, Picture, Genres, Discription = investigate_further(Link)	#get image, genres, and descriptions
-			outputString = outputformat.format(id = i,name = Name,release_year = year,developers = Devs,publishers = Pubs,img_url = Picture,genres = Genres, description = Discription, src_url=URL, console = "GBC")
+			outputString = outputformat.format(id = i,name = Name,release_year = year,developers = Devs,publishers = Pubs,img_url = Picture,genres = Genres, description = Discription, src_url=URL, console = "Game Boy Color")
 			file.write(outputString)
 		else:
 			print("this row does not have enough data?")
