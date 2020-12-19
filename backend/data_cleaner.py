@@ -3,7 +3,7 @@ from whoosh.fields import Schema, TEXT, KEYWORD, ID, STORED, NUMERIC	#for creati
 from whoosh.query import Query, And, Not, Term, Phrase	#for searching the database for douplicates
 from whoosh.analysis import SimpleAnalyzer
 
-#this code is for fixing genre = "'" errors
+#this code is for fixing genre errors in the woosh database
 #-steven A
 
 schema = Schema(GID=ID(stored=True, unique=True),#GID = Game ID
@@ -26,16 +26,20 @@ searcher = idx.searcher()
 
 idxwriter= idx.writer()
 
-q = And([Term('genres', "'")])
-results = searcher.search(q)
+q = And([Term('consoles', "game boy color")])
+results = searcher.search(q, limit=None)
 print(results)
 for result in results:
 	print(result['GID'],result['name'],result['consoles'],result['genres'])
-	newGenres = result['genres']
-	print(newGenres)
-	newGenres = newGenres.replace(", ', ',",",")
-	print(newGenres)
-	idxwriter.update_document(GID=result['GID'],name=result['name'],release_year=result['release_year'],developers=result['developers'],publishers=result['publishers'],images=result['images'],sources=result['sources'],genres=newGenres, consoles = result['consoles'], description=result['description'])
+	Consoles = result['consoles']
+	Consoles = Consoles.split(',')
+	newConsoles=""
+	for item in Consoles:
+		if item not in newConsoles:
+			newConsoles+=','+item
+	newConsoles = newConsoles[1:]
+	print(newConsoles)
+	idxwriter.update_document(GID=result['GID'],name=result['name'],release_year=result['release_year'],developers=result['developers'],publishers=result['publishers'],images=result['images'],sources=result['sources'],genres=result['genres'], consoles = newConsoles, description=result['description'])
 	
 idxwriter.commit(optimize=True)
 numdocs = searcher.doc_count_all()
