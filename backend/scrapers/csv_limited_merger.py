@@ -9,6 +9,8 @@ from sys import argv
 #this program merges entries based of GID
 
 #please do not use this to overwrite the original csv before checking to make sure your changes are what you wanted
+#this program writes all at once at the very end
+#priority is given to input1
 
 input1 = argv[1]
 input2 = argv[2]
@@ -26,7 +28,7 @@ List1 = FileInput1.readlines()
 List2 = FileInput2.readlines()
 outputLines.append(List1[0])
 FileData = {}
-for line in List2[1:]:
+for line in List2[1:]:#file2 data goes into FileData[GID]
 	match = re.match(r'([^,]*),"(.*)",([^,]*),\[(.*)\],\[(.*)\],"(.*)",\[(.*)\],\[(.*)\],\[(.*)\],"(.*)"',line)
 	FileData[match.group(1)]=match
 	print(match.group(2))#print the name
@@ -51,11 +53,11 @@ for line in List1[1:]:
 				img = FileData[GID].group(6)#take the image from the other csv
 			if FileData[GID].group(7)!="n/a":
 				src += ","+FileData[GID].group(7)
-				src.replace("n/a,","").replace("n/a","")
+			src.replace("n/a,","").replace("n/a","")#remove old "empty" marker
 			if FileData[GID].group(8)!="n/a":
 				if FileData[GID].group(8) not in genres:#the genres may not be unique, so check first
 					genres+=","+FileData[GID].group(8)
-					genres.replace("n/a,","").replace("n/a","")
+				genres.replace("n/a,","").replace("n/a","")#remove old "empty" marker
 			if desc =="n/a":
 				desc = FileData[GID].group(10)
 		outputLines.append(GID+','+'"'+name+'"'+','+year+','+'['+devs+']'+','+'['+pubs+']'+','+'"'+img+'"'+','+'['+src+']'+','+'['+genres+']'+','+'['+console+']'+','+'"'+desc+'"'+'\n')
