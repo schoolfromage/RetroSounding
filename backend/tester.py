@@ -24,12 +24,12 @@ else:
 searcher = idx.searcher()
 QP = QueryParser("name",schema=schema)
 
-#q = And([Term('genres', ''),Not(Term('consoles','nes'))])
-#results = searcher.search(q)
-#print(results)
-#for result in results:
-#	print(result['GID'],result['name'],result['consoles'],result['genres'])
+q = Term('name','abm')
+results = searcher.search(q)
+print(results)
+for result in results:
+	print(result['GID'],'\t',result['name'],'\t',result['consoles'],'\t',result['genres'],'\t',result['images'])
 
-numdocs = searcher.doc_count_all()
-print(numdocs)
+#numdocs = searcher.doc_count_all()
+#print(numdocs)
 searcher.close()

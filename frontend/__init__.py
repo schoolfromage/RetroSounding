@@ -109,19 +109,19 @@ def entry():
 	name, release_year, developers, publishers, images, sources, genres, description, consoles = mysearch.retrieve(gid)
 	validSources = list()
 
-	for s in sources:
-		try:
-			urlparse(s)
-			if urlopen(s).getcode() == 200:
-				validSources.append(s)
-		except:
-			print("invalid url")
+	# for s in sources:
+		# try:
+			# urlparse(s)
+			# if urlopen(s).getcode() == 200:
+				# validSources.append(s)
+		# except:
+			# print("invalid url")
 
-	l = '/error/'
-	if not validSources:
-		validSources.append(l)
+	# l = '/error/'
+	# if not validSources:
+		# validSources.append(l)
 
-	return render_template('entry.html', gid=gid, name=name, release_year=release_year, developers=developers, publishers=publishers, images=images, sources=validSources, genres=genres, description=description, consoles=consoles)
+	return render_template('entry.html', gid=gid, name=name, release_year=release_year, developers=developers, publishers=publishers, images=images, sources=sources, genres=genres, description=description, consoles=consoles)
 
 @app.route('/error/', methods=['GET', 'POST'])
 def error():
@@ -208,7 +208,7 @@ class MyWhooshSearch(object):
 			genres = result[0]['genres'].split(',')
 			description = result[0]['description']
 			consoles = result[0]['consoles'].split(',')
-
+			print(sources)
 		return name, release_year, developers, publishers, images, sources, genres, description, consoles
 
 	def index(self):

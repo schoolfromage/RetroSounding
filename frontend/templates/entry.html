@@ -43,9 +43,9 @@
             <a href = "{{ url_for('results') }}?searchterm=genre:'{{item.lower()}}'"> {{item}} </a>
             {%endfor%}
           </p>
-          <p class="sources">For extra information:
+          <p class="sources">For extra information:<br />
             {%for item in sources%}
-            <a href = {{item}}>Info</a>
+            <a href = {{item}}>{{item}}</a> <br />
             {%endfor%}
           </p>
           <div class="actions">
