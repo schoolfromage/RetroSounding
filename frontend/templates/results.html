@@ -22,9 +22,7 @@
           <label class="chk">Consoles<input tabindex="8" type=checkbox name="consoles" checked/><span></span></label>
         </div>
 				<input class="butt" type="submit" value="Search now"/>
-      </form>
-      <form method="post" action="{{ url_for('index') }}">
-        <input class="butt" type="submit" value="Go Home" />
+				<a href="{{ url_for('index') }}" class="butt"/>Go Home </a>
       </form>
       <div class="pages">
         <form method="post" action="{{ url_for('results') }}">
@@ -63,11 +61,11 @@
               <div class="publ">Published by {{p}}</div>
             </div>
             <div class="buttons">
-              <form method="post" action="{{ url_for('entry') }}">
+              <form method="post" action="{{ url_for('entry') }}?gid={{ gid }}">
                 <input style="display:none" type="text" name="gid" value="{{ gid }}">
-                <button class="butt" type="button" gid="{{ gid }}" id="share" onclick="Share(this)">Share</button>
                 <label class="butt" ><input type="submit" value="Info"/></label>
               </form>
+              <button class="butt" type="button" gid="{{ gid }}" id="share" onclick="Share(this)">Share</button>
               <form method="get" action="{{ url_for('results') }}">
                 <label style="display:none"><input type="text" value="related:{{ gid }}" name="searchterm"/></label>
                 <label class="butt" ><input type="submit" value="Related Games"/></label>

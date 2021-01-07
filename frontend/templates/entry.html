@@ -22,9 +22,7 @@
           <label class="chk">Consoles<input tabindex="8" type=checkbox name="consoles" checked/><span></span></label>
         </div>
 				<input class="butt" type="submit" value="Search now"/>
-      </form>
-      <form method="post" action="{{ url_for('index') }}">
-        <input class="butt" type="submit" value="Go Home" />
+				<a href="{{ url_for('index') }}" class="butt"/>Go Home</a>
       </form>
     </header>
     <div class="entry">
@@ -52,18 +50,11 @@
             <h4>Actions:</h4>
             <form method="post" action="{{ url_for('entry') }}">
               <input style="display:none" type="text" name="gid" value="{{ gid }}">
-              <button class="butt bu" type="button" gid="{{ gid }}" id="share" onclick="Share(this)">Share</button>
-              <label class="butt" ><input type="submit" class="bu" value="Info"/></label>
+              <button class="butt bu" type="button" gid="{{ gid }}" id="share" onclick="Share(this)">Copy Link</button>
             </form>
             <form method="get" action="{{ url_for('results') }}">
               <label style="display:none"><input type="text" value="related:{{ gid }}" name="searchterm"/></label>
               <label><input class="bu" type="submit" value="Related Games"/></label>
-            </form>
-            <form method="post" action="{{ url_for('index') }}">
-              <input type="submit" class="bu" value="Search Page"/>
-            </form>
-            <form action="{{ url_for('index') }}">
-                <input type="submit" class="bu" value="Go Home" />
             </form>
           </div>
       </div>

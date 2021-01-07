@@ -271,6 +271,7 @@ header .butt {
   background-color: rgba(0,0,0,0.3);
   color: #eee;
   cursor:pointer;
+  text-decoration: none;
 }
 .result button.butt:hover,
 .result button.butt:focus,
