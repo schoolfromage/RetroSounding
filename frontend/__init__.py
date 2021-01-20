@@ -24,8 +24,8 @@ def index():
 @app.route('/results/', methods=['GET', 'POST'])
 def results():
 	global mysearch
-	if mysearch == None:
-		mysearch = MyWhooshSearch()
+	try: mysearch
+	except NameError: mysearch = MyWhooshSearch()
 	if request.method == 'POST':
 		data = request.form
 	else:
@@ -102,8 +102,8 @@ def results():
 @app.route('/entry/', methods=['GET', 'POST'])
 def entry():
 	global mysearch
-	if mysearch == None:
-		mysearch = MyWhooshSearch()
+	try: mysearch
+	except NameError: mysearch = MyWhooshSearch()
 	if request.method == 'POST':
 		data = request.form
 	else:
@@ -224,7 +224,6 @@ class MyWhooshSearch(object):
 			sys.exit(-1)
 
 
-mysearch = MyWhooshSearch()
 # Create and run the app on http://127.0.0.1:5000/
 if __name__ == '__main__':
 	app.run(debug=True)
