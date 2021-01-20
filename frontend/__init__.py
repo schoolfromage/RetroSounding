@@ -14,6 +14,7 @@ from math import ceil
 from whoosh.query import And, Or, Not, Term #used for the relevent result custom query
 import re #used for the query management
 
+
 app = Flask(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
@@ -22,7 +23,6 @@ def index():
 
 @app.route('/results/', methods=['GET', 'POST'])
 def results():
-	global mysearch
 	if request.method == 'POST':
 		data = request.form
 	else:
@@ -98,7 +98,6 @@ def results():
 
 @app.route('/entry/', methods=['GET', 'POST'])
 def entry():
-	global mysearch
 	if request.method == 'POST':
 		data = request.form
 	else:
@@ -131,7 +130,8 @@ class MyWhooshSearch(object):
 	"""docstring for MyWhooshSearch"""
 	def __init__(self):
 		super(MyWhooshSearch, self).__init__()
-
+		self.index()
+		
 	def search(self, queryEntered, fields, page):
 		if not fields or fields == '_':
 			fields = ['name', 'release_year', 'developers', 'publishers', 'genres', 'description', 'consoles']
@@ -217,9 +217,8 @@ class MyWhooshSearch(object):
 		else: 
 			sys.exit(-1)
 
+
+mysearch = MyWhooshSearch()
 # Create and run the app on http://127.0.0.1:5000/
 if __name__ == '__main__':
-	global mysearch
-	mysearch = MyWhooshSearch()
-	mysearch.index()
 	app.run(debug=True)
