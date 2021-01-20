@@ -23,6 +23,9 @@ def index():
 
 @app.route('/results/', methods=['GET', 'POST'])
 def results():
+	global mysearch
+	if mysearch == None:
+		mysearch = MyWhooshSearch()
 	if request.method == 'POST':
 		data = request.form
 	else:
@@ -98,6 +101,9 @@ def results():
 
 @app.route('/entry/', methods=['GET', 'POST'])
 def entry():
+	global mysearch
+	if mysearch == None:
+		mysearch = MyWhooshSearch()
 	if request.method == 'POST':
 		data = request.form
 	else:
