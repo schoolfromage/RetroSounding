@@ -1,7 +1,8 @@
 # __init__.py
 # Create a flask app
 
-from flask import Flask, render_template, url_for, request
+from flask import Flask, render_template, url_for, request, session
+from flask_session import Session
 import whoosh
 from whoosh.fields import *
 from whoosh.qparser import MultifieldParser
@@ -14,8 +15,12 @@ from math import ceil
 from whoosh.query import And, Or, Not, Term #used for the relevent result custom query
 import re #used for the query management
 
-
 app = Flask(__name__)
+#settup the flask session as per the docs
+#the session should hold a 'mysearch' index containing the mysearch class object
+SESSION_TYPE='filesystem'
+app.config.from_object(__name__)
+Session(app)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -23,9 +28,9 @@ def index():
 
 @app.route('/results/', methods=['GET', 'POST'])
 def results():
-	global mysearch
-	try: mysearch
-	except NameError: mysearch = MyWhooshSearch()
+	if not 'mysearch' in session:
+		session['mysearch'] = MyWhooshSearch()
+	mysearch = session['mysearch']
 	if request.method == 'POST':
 		data = request.form
 	else:
@@ -101,9 +106,9 @@ def results():
 
 @app.route('/entry/', methods=['GET', 'POST'])
 def entry():
-	global mysearch
-	try: mysearch
-	except NameError: mysearch = MyWhooshSearch()
+	if not 'mysearch' in session:
+		session['mysearch'] = MyWhooshSearch()
+	mysearch = session['mysearch']
 	if request.method == 'POST':
 		data = request.form
 	else:
